@@ -3,7 +3,8 @@ import { handleRegister } from "../services/userServices/register.js";
 
 const router = Router()
 
-router.post("/", handleRegister)
+router.post("/register", handleRegister)
+
 
 
 

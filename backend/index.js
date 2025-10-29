@@ -1,11 +1,13 @@
 import express from "express";
 import env from "dotenv";
 import mongoose from "mongoose";
-
+import userRouter from "./routes/user.js"
 env.config();
 
 const app = express();
 const PORT = process.env.PORT;
+
+app.use(express.json());
 
 mongoose
   .connect("mongodb://localhost:27017/eCommerce")
@@ -16,8 +18,11 @@ mongoose
     console.log(err);
   });
 
+app.use(express.json());
 
 
+
+  app.use("/users", userRouter)
 
 
 app.listen(PORT, () => {
