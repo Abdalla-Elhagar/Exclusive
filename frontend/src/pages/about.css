@@ -1,0 +1,28 @@
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+.about .mySwiper {
+  position: relative;
+  height: 700px;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.swiper-pagination-bullet {
+  width: 10px !important;
+  height: 10px !important;
+  opacity: 1;
+  background: #d5d5d5 !important;
+}
+
+.swiper-pagination-bullet-active {
+  width: 10px !important;
+  height: 10px !important;
+  border: 2px solid white !important;
+  outline: 2px solid #d5d5d5;
+  background-color: #db4444 !important;
+}

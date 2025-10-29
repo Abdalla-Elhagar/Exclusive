@@ -1,0 +1,32 @@
+.custom-prev,
+.custom-next {
+  position: absolute;
+
+  z-index: 10;
+  cursor: pointer;
+  color: #000;
+  background-color: #f5f5f5;
+  padding: 9px 10px;
+  border-radius: 9999px;
+  transition: 0.3s;
+}
+
+.custom-prev {
+  right: 100px;
+}
+
+.custom-next {
+  right: 50px;
+}
+
+.custom-prev:hover,
+.custom-next:hover {
+  color: rgb(219 68 68);
+}
+
+@media (width < 768px) {
+  .custom-prev,
+  .custom-next {
+    display: none;
+  }
+}
