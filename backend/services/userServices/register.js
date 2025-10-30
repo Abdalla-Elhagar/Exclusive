@@ -24,6 +24,12 @@ export const handleRegister = async (req, res) => {
 
      const token = generateJWT(newUser);
 
+     res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+
     return res.status(200).json({
       message: "User registered successfully",
       phone: newUser.phone,
