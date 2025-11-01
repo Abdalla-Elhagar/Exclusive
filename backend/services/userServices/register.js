@@ -22,12 +22,13 @@ export const handleRegister = async (req, res) => {
 
     await newUser.save();
 
-     const token = generateJWT(newUser);
+    const token = generateJWT(newUser);
 
-     res.cookie("token", token, {
+    res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: false,
+      sameSite: "strict",
+      maxAge: 86400000,
     });
 
     return res.status(200).json({
