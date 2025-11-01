@@ -2,8 +2,10 @@ import express from "express";
 import env from "dotenv";
 import mongoose from "mongoose";
 import userRouter from "./routes/user.js";
+import productRouter from "./routes/product.js";
 import cookieParser from "cookie-parser";
 import cors from "cors"
+import { seedProducts } from "./services/productServices/seedProducts.js";
 
 env.config();
 
@@ -24,6 +26,10 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/users", userRouter);
+app.use("/products", productRouter);
+
+
+seedProducts()
 
 app.listen(PORT, () => {
   try {
