@@ -14,6 +14,5 @@ const productSchema = new Schema({
   sales: Number,
 });
 
-const product = mongoose.model("product", productSchema);
+export const productModel = mongoose.model("product", productSchema);
 
-export default product

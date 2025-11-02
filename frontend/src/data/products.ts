@@ -1,4 +1,21 @@
-export const UpdatedProducts = [
+export interface productType {
+  id: number;
+  title: string;
+  image: string;
+  price: number;
+  description: string;
+  brand: string;
+  model: string;
+  color?: string;
+  category: string;
+  discount?: number;
+  rate: number;
+  sales: number;
+  popular?: boolean;
+  onSale?: true;
+}
+
+export const UpdatedProducts: productType[] = [
   {
     id: 1,
     title:
@@ -3841,4 +3858,3 @@ export const UpdatedProducts = [
     sales: 1221,
   },
 ];
-
