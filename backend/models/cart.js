@@ -1,17 +1,16 @@
 import mongoose, { Schema } from "mongoose";
-import product from "./product";
 
 const cartItemSchema = new Schema({
-    product: {type:Schema.Types.ObjectId, ref: "product", require:true},
+    product: {type:Schema.Types.ObjectId, ref: "product", required:true},
     unitPrice: Number,
-    quantity: Number,
+    quantity: {type: Number , required: true, default: 1},
 })
 
 const cartSchema = new Schema({
-    userId: { type: Schema.Types.ObjectId , ref: "user" , require: true},
+    userId: { type: Schema.Types.ObjectId , ref: "user" , required: true},
     items: [cartItemSchema],
-    totalAmount: {type: Number , require},
-    status: {type: "active" | "completed", require: true}
+    totalAmount: {type: Number , required: true, default: 0},
+    completed: {type: Boolean, default: false}
 })
 
 

@@ -1,4 +1,4 @@
-import userModel from "../../models/user.js";
+import {userModel} from "../../models/user.js";
 import bcrypt from "bcrypt";
 import { generateJWT } from "../../utils/generateJWT.js";
 
