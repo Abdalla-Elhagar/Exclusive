@@ -18,7 +18,7 @@ router.post("/add-cart-item", verifyJWT, async (req, res) => {
 
     const respose = await addCartItem({ productId, userId, quantity });
 
-    res.status(200).json({ statusCode: respose.statusCode, data: respose.data });
+    res.status(respose.statusCode).json(respose.data);
   } catch (err) {
     console.log(err);
   }

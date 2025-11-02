@@ -12,7 +12,7 @@ export const verifyJWT = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     req.user = {
-      id: decoded.id,
+      _id: decoded._id,
       phone: decoded.phone,
     };
     next();
