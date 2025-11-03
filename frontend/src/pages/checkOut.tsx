@@ -17,6 +17,16 @@ export default function CheckOut() {
     refClick.current?.click();
   }
   const [isChecked, setIsChecked] = useState(false);
+
+  const inputsData = [
+    "First Name",
+    "Company Name",
+    "Street Address",
+    "Apartment, floor, etc. (optional)",
+    "Town/City",
+    "Phone Number",
+    "Email Address",
+  ];
   return (
     <section className="checkOut">
       <div className="container">
@@ -27,55 +37,19 @@ export default function CheckOut() {
           <div className="left flex max-sm:w-full flex-col gap-5">
             <h2 className="text-3xl font-semibold mb-10">Billing Details</h2>
 
-            <div className="input flex flex-col gap-3 text-black/50">
-              <label>First Name</label>
-              <input
-                className="input bg-[#F5F5F5] py-2 w-[450px]"
-                type="text"
-              />
-            </div>
-            <div className="input flex flex-col gap-3 text-black/50">
-              <label>Company Name</label>
-              <input
-                className="input bg-[#F5F5F5] py-2 w-[450px]"
-                type="text"
-              />
-            </div>
-            <div className="input flex flex-col gap-3 text-black/50">
-              <label>Street Address</label>
-              <input
-                className="input bg-[#F5F5F5] py-2 w-[450px]"
-                type="text"
-              />
-            </div>
-            <div className="input flex flex-col gap-3 text-black/50">
-              <label>Apartment, floor, etc. (optional)</label>
-              <input
-                className="input bg-[#F5F5F5] py-2 w-[450px]"
-                type="text"
-              />
-            </div>
-            <div className="input flex flex-col gap-3 text-black/50">
-              <label>Town/City</label>
-              <input
-                className="input bg-[#F5F5F5] py-2 w-[450px]"
-                type="text"
-              />
-            </div>
-            <div className="input flex flex-col gap-3 text-black/50">
-              <label>Phone Number</label>
-              <input
-                className="input bg-[#F5F5F5] py-2 w-[450px]"
-                type="text"
-              />
-            </div>
-            <div className="input flex flex-col gap-3 text-black/50">
-              <label>Email Address</label>
-              <input
-                className="input bg-[#F5F5F5] py-2 w-[450px]"
-                type="text"
-              />
-            </div>
+            {inputsData.map((i, index) => (
+              <div
+                key={index}
+                className="input flex flex-col gap-3 text-black/50"
+              >
+                <label>{i}</label>
+                <input
+                  className="input bg-[#F5F5F5] py-2 w-[450px]"
+                  type="text"
+                />
+              </div>
+            ))}
+
             <div className="checkbox relative flex items-center gap-3">
               <input
                 type="checkbox"

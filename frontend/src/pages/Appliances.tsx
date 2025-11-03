@@ -1,5 +1,5 @@
 import { UpdatedProducts as Products } from "../data/products";
-import ProductCard from "../components/productCard";
+import ProductCard from "../components/ProductCard";
 
 export default function Appliances() {
   const filteredProducts: any = Products.filter(

@@ -24,125 +24,31 @@ export default function HeroSlider() {
         modules={[Pagination, Autoplay]}
         className="mySwiper"
       >
-        <SwiperSlide>
-          <div className="content bg-black w-full h-[400px] max-sm:flex-col max-sm:gap-10 items-center max-sm:h-full z-10 max-sm:text-center py-5 flex p-12">
-            <div className="left text-white flex flex-col gap-7 justify-between">
-              <div className="iphone flex max-sm:mx-auto items-center gap-9">
-                <img className="w-[40px]" src={appleLogo} />
-                <p>iPhone 14 Series</p>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <SwiperSlide key={index}>
+            <div className="content bg-black w-full h-[400px] max-sm:flex-col max-sm:gap-10 items-center max-sm:h-full z-10 max-sm:text-center py-5 flex p-12">
+              <div className="left text-white flex flex-col gap-7 justify-between">
+                <div className="iphone flex max-sm:mx-auto items-center gap-9">
+                  <img className="w-[40px]" src={appleLogo} />
+                  <p>iPhone 14 Series</p>
+                </div>
+                <p className="text-[48px]">Up to 10% off Voucher</p>
+                <div className="shopNow">
+                  <a
+                    className="ml-2 text-xl border-b-2 border-white mr-5 pb-2"
+                    href="#"
+                  >
+                    Shop Now
+                  </a>
+                  <EastIcon />
+                </div>
               </div>
-              <p className="text-[48px]">Up to 10% off Voucher</p>
-              <div className="shopNow">
-                <a
-                  className="ml-2 text-xl border-b-2 border-white mr-5 pb-2"
-                  href="#"
-                >
-                  Shop Now
-                </a>
-                <EastIcon />
-              </div>
-            </div>
-            <div className="right">
-              <img className="w-[496px]" src={iphone} />
-            </div>
-          </div>
-        </SwiperSlide>
-
-        <SwiperSlide>
-          <div className="content bg-black w-full h-[400px] max-sm:flex-col max-sm:gap-10 items-center max-sm:h-full z-10 max-sm:text-center py-5 flex p-12">
-            <div className="left text-white flex flex-col gap-7 justify-between">
-              <div className="iphone flex max-sm:mx-auto items-center gap-9">
-                <img className="w-[40px]" src={appleLogo} />
-                <p>iPhone 14 Series</p>
-              </div>
-              <p className="text-[48px]">Up to 10% off Voucher</p>
-              <div className="shopNow">
-                <a
-                  className="ml-2 text-xl border-b-2 border-white mr-5 pb-2"
-                  href="#"
-                >
-                  Shop Now
-                </a>
-                <EastIcon />
+              <div className="right">
+                <img className="w-[496px]" src={iphone} />
               </div>
             </div>
-            <div className="right">
-              <img className="w-[496px]" src={iphone} />
-            </div>
-          </div>
-        </SwiperSlide>
-
-        <SwiperSlide>
-          <div className="content bg-black w-full h-[400px] max-sm:flex-col max-sm:gap-10 items-center max-sm:h-full z-10 max-sm:text-center py-5 flex p-12">
-            <div className="left text-white flex flex-col gap-7 justify-between">
-              <div className="iphone flex max-sm:mx-auto items-center gap-9">
-                <img className="w-[40px]" src={appleLogo} />
-                <p>iPhone 14 Series</p>
-              </div>
-              <p className="text-[48px]">Up to 10% off Voucher</p>
-              <div className="shopNow">
-                <a
-                  className="ml-2 text-xl border-b-2 border-white mr-5 pb-2"
-                  href="#"
-                >
-                  Shop Now
-                </a>
-                <EastIcon />
-              </div>
-            </div>
-            <div className="right">
-              <img className="w-[496px]" src={iphone} />
-            </div>
-          </div>
-        </SwiperSlide>
-
-        <SwiperSlide>
-          <div className="content bg-black w-full h-[400px] max-sm:flex-col max-sm:gap-10 items-center max-sm:h-full z-10 max-sm:text-center py-5 flex p-12">
-            <div className="left text-white flex flex-col gap-7 justify-between">
-              <div className="iphone flex max-sm:mx-auto items-center gap-9">
-                <img className="w-[40px]" src={appleLogo} />
-                <p>iPhone 14 Series</p>
-              </div>
-              <p className="text-[48px]">Up to 10% off Voucher</p>
-              <div className="shopNow">
-                <a
-                  className="ml-2 text-xl border-b-2 border-white mr-5 pb-2"
-                  href="#"
-                >
-                  Shop Now
-                </a>
-                <EastIcon />
-              </div>
-            </div>
-            <div className="right">
-              <img className="w-[496px]" src={iphone} />
-            </div>
-          </div>
-        </SwiperSlide>
-
-        <SwiperSlide>
-          <div className="content bg-black w-full h-[400px] max-sm:flex-col max-sm:gap-10 items-center max-sm:h-full z-10 max-sm:text-center py-5 flex p-12">
-            <div className="left text-white flex flex-col gap-7 justify-between">
-              <div className="iphone flex max-sm:mx-auto items-center gap-9">
-                <img className="w-[40px]" src={appleLogo} />
-                <p>iPhone 14 Series</p>
-              </div>
-              <p className="text-[48px]">Up to 10% off Voucher</p>
-              <div className="shopNow">
-                <a
-                  className="ml-2 text-xl border-b-2 border-white mr-5 pb-2"
-                  href="#"
-                >
-                  Shop Now
-                </a>
-                <EastIcon />
-              </div>
-            </div>
-            <div className="right">
-              <img className="w-[496px]" src={iphone} />
-            </div>
-          </div>
-        </SwiperSlide>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );

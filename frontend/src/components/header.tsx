@@ -1,6 +1,6 @@
 import { Typography, IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import ResponsiveAppBar from "./appBar";
+import ResponsiveAppBar from "./appBar/appBar";
 
 export default function Header() {
   return (

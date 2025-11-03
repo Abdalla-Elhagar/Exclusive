@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProductCard from "../components/productCard";
+import ProductCard from "../components/ProductCard";
 
 export default function ProductData() {
   const dispatch = useDispatch();

@@ -43,11 +43,11 @@ export default function LogIn() {
               type="number"
               id="phone"
             />
-            {error ? (
+            {error && (
               <p className="text-sm text-red-500">
-                phone or password has been error{" "}
+                phone or password has been error
               </p>
-            ) : null}
+            )}
             <input
               value={user.password}
               onChange={(e) => setUser({ ...user, password: e.target.value })}

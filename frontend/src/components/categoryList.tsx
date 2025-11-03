@@ -5,6 +5,38 @@ import ListItemText from "@mui/material/ListItemText";
 import { Link } from "react-router-dom";
 
 export default function CategoreList() {
+  const categoryListData = [
+    {
+      path: "/phones",
+      primary: "Phones",
+    },
+
+    {
+      path: "/audio",
+      primary: "Audio",
+    },
+
+    {
+      path: "/TV",
+      primary: "TV",
+    },
+
+    {
+      path: "/Gaming",
+      primary: "Gaming",
+    },
+
+    {
+      path: "/appliances",
+      primary: "Appliances",
+    },
+
+    {
+      path: "/laptops",
+      primary: "Laptops",
+    },
+  ];
+
   return (
     <>
       <List
@@ -12,37 +44,13 @@ export default function CategoreList() {
         component="nav"
         aria-labelledby="nested-list-subheader"
       >
-        <ListItemButton>
-          <Link className="w-full" to="/phones">
-            <ListItemText primary="Phones" />
-          </Link>
-        </ListItemButton>
-
-        <ListItemButton>
-          <Link className="w-full"  to="/audio">
-            <ListItemText primary="Audio" />
-          </Link>
-        </ListItemButton>
-        <ListItemButton>
-          <Link className="w-full"  to="/TV">
-            <ListItemText primary="TV" />
-          </Link>
-        </ListItemButton>
-        <ListItemButton>
-          <Link className="w-full"  to="/Gaming">
-            <ListItemText primary="Gaming" />
-          </Link>
-        </ListItemButton>
-        <ListItemButton>
-          <Link className="w-full"  to="/appliances">
-            <ListItemText primary="Appliances" />
-          </Link>
-        </ListItemButton>
-        <ListItemButton>
-          <Link className="w-full"  to="/laptops">
-            <ListItemText primary="Laptops" />
-          </Link>
-        </ListItemButton>
+        {categoryListData.map((i, index) => (
+          <ListItemButton key={index}>
+            <Link className="w-full" to={i.path}>
+              <ListItemText primary={i.primary} />
+            </Link>
+          </ListItemButton>
+        ))}
       </List>
     </>
   );

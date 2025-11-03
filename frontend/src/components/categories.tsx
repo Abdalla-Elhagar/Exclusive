@@ -54,6 +54,24 @@ const categories: any = [
 ];
 
 export default function Categories() {
+  const breakpointsData = {
+    640: {
+      slidesPerView: 2,
+      spaceBetween: 20,
+    },
+    1024: {
+      slidesPerView: 3,
+      spaceBetween: 40,
+    },
+    1280: {
+      slidesPerView: 4,
+      spaceBetween: 50,
+    },
+    1300: {
+      slidesPerView: 5,
+      spaceBetween: 50,
+    },
+  };
   return (
     <div className="container border-b-2 relative">
       <div className="custom-prev top-[65px] max-sm:hidden absolute">
@@ -79,24 +97,7 @@ export default function Categories() {
             nextEl: ".custom-next",
             prevEl: ".custom-prev",
           }}
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 20,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 40,
-            },
-            1280: {
-              slidesPerView: 4,
-              spaceBetween: 50,
-            },
-            1300: {
-              slidesPerView: 5,
-              spaceBetween: 50,
-            },
-          }}
+          breakpoints={breakpointsData}
           modules={[Autoplay, Navigation]}
         >
           {categories.map((category: any) => (

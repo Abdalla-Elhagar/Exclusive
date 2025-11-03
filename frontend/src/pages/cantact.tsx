@@ -32,24 +32,9 @@ export default function Cantact() {
           </div>
           <div className=" col-span-3 max-xl:col-span-2 flex-col flex border shadow-lg mb-40 max-lg:mb-10 py-10 px-7">
             <div className="inputs flex gap-5 max-sm:flex-col">
-              <input
-                className="col-span-1 w-full bg-black/5 py-4 placeholder:text-lg px-4"
-                required
-                placeholder="Your Name"
-                type="text"
-              />
-              <input
-                className="col-span-1 w-full bg-black/5 py-4 placeholder:text-lg px-4"
-                required
-                placeholder="Your Email"
-                type="email"
-              />
-              <input
-                className="col-span-1 w-full bg-black/5 py-4 placeholder:text-lg px-4"
-                required
-                placeholder="Your Phone"
-                type="number"
-              />
+              <ContactInputField type={"text"} placeholder={"Your Name"} />
+              <ContactInputField type={"email"} placeholder={"Your Email"} />
+              <ContactInputField type={"number"} placeholder={"Your Phone"} />
             </div>
             <textarea
               className="bg-black/5 py-4 px-4 mt-5 h-[250px] w-full placeholder:text-lg"
@@ -62,5 +47,22 @@ export default function Cantact() {
         </div>
       </div>
     </section>
+  );
+}
+
+function ContactInputField({
+  type,
+  placeholder,
+}: {
+  type: string;
+  placeholder: string;
+}) {
+  return (
+    <input
+      className="col-span-1 w-full bg-black/5 py-4 placeholder:text-lg px-4"
+      required
+      placeholder={placeholder}
+      type={type}
+    />
   );
 }

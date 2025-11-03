@@ -1,4 +1,4 @@
-import ProductCard from "../components/productCard";
+import ProductCard from "../components/ProductCard";
 import { UpdatedProducts as Products } from "../data/products";
 
 export default function TV() {

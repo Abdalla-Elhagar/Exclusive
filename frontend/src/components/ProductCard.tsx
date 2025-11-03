@@ -160,14 +160,14 @@ export default function ProductCard({ product }: { product: productType }) {
     });
   }
   return (
-    <Card key={product.id} className="group mx-auto" sx={{ maxWidth: 320 }}>
+    <Card className="group mx-auto relative" sx={{ maxWidth: 300 }}>
       <div
-        className={`image w-full h-[300px] relative bg-[#F5F5F5] overflow-hidden rounded-md`}
+        className={`image w-full h-[260px] top-0 relative bg-[#F5F5F5] overflow-hidden rounded-md`}
       >
         {location.hash === "#/favorite" ? (
           <button
             onClick={() => removeFavorite(product)}
-            className="absolute flex justify-center items-center hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]"
+            className="absolute z-20 flex justify-center items-center hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]"
           >
             <RiDeleteBin6Line className="size-5" />
           </button>
@@ -176,12 +176,12 @@ export default function ProductCard({ product }: { product: productType }) {
             onClick={() => {
               addToFavorite(product, product.id);
             }}
-            className={`absolute ${
+            className={`absolute z-20 ${
               user.favoriteIDs?.includes(product.id) ? "bg-mainColor" : ""
             } hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]`}
           >
             <FavoriteBorderIcon
-              className={`${
+              className={` ${
                 user.favoriteIDs?.includes(product.id) ? "text-white" : ""
               }`}
             />
@@ -190,7 +190,7 @@ export default function ProductCard({ product }: { product: productType }) {
         <Link
           onClick={() => sendDataToProductPage(product)}
           to="/productData"
-          className="absolute hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-1 right-5 top-16 bg-[#eee]"
+          className="absolute z-20 hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-1 right-5 top-16 bg-[#eee]"
         >
           <RemoveRedEyeOutlinedIcon />
         </Link>
@@ -202,7 +202,7 @@ export default function ProductCard({ product }: { product: productType }) {
 
         <button
           onClick={() => addToCart(product)}
-          className="addToCart absolute text-white bg-black w-full h-12 transition-all duration-300 -bottom-12 group-hover:bottom-0 left-0"
+          className="addToCart z-10 absolute text-white bg-black w-full h-12 transition-all duration-300 -bottom-12 group-hover:bottom-0 left-0"
         >
           Add To Cart
         </button>

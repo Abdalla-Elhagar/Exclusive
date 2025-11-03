@@ -5,8 +5,8 @@ import { UpdatedProducts as Products } from "../data/products";
 import Image from "../images/homeImages/JBL.png";
 
 import "react-toastify/dist/ReactToastify.css";
-import ProductCard from "./productCard";
-import Timer from "./timer";
+import ProductCard from './ProductCard';
+import Timer from './Timer';
 
 export default function BestSelling() {
   const bestProducts = Products.filter(
@@ -33,7 +33,7 @@ export default function BestSelling() {
 
       <div className="bestProducts4 flex mt-16 justify-center flex-wrap gap-8">
         {first4Products.map((product: any) => (
-          <ProductCard product={product} />
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
 
