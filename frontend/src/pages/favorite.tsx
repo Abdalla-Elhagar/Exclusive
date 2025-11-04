@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import SectionHeader from "../components/sectionHeader";
 import ProductCard from "../components/ProductCard";
 import { useSelector } from "react-redux";
-import type { productType } from "../data/products";
+import type { productType } from "../Types/products";
 
 export default function Favorite() {
   const Products: productType[] = useSelector(

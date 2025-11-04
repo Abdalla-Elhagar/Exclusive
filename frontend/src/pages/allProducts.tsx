@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
-import type { productType } from "../data/products";
+import type { productType } from "../Types/products";
 
 export default function AllProducts() {
   const Products:productType[] = useSelector((state:any) => state.productData.data)

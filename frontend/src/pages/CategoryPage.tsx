@@ -1,4 +1,4 @@
-import { type productType } from "../data/products";
+import { type productType } from "../Types/products";
 import ProductCard from "../components/ProductCard";
 import { useSelector } from "react-redux";
 

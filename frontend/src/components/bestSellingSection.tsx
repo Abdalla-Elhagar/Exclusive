@@ -6,7 +6,7 @@ import Image from "../images/homeImages/JBL.png";
 import "react-toastify/dist/ReactToastify.css";
 import ProductCard from './ProductCard';
 import Timer from './Timer';
-import type { productType } from "../data/products";
+import type { productType } from "../Types/products";
 import { useSelector } from "react-redux";
 
 export default function BestSelling() {

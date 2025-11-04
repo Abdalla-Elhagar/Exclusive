@@ -10,7 +10,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductCard from "../components/ProductCard";
-import type { productType } from "../data/products";
+import type { productType } from "../Types/products";
 
 export default function ProductData() {
   const dispatch = useDispatch();

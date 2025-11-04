@@ -8,7 +8,7 @@ import WestOutlinedIcon from "@mui/icons-material/WestOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import ProductCard from "./ProductCard";
 import { useSelector } from "react-redux";
-import type { productType } from "../data/products";
+import type { productType } from "../Types/products";
 
 export default function TodaySlider() {
   const Products:productType[] = useSelector((state:any) => state.productData.data)
