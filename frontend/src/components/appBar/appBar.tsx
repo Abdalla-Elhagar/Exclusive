@@ -22,6 +22,7 @@ export default function MenuAppBar() {
   
   const user = useSelector((state: any) => state.SelectedUser.selectedData);
   
+  const logedInUser = useSelector((state:any)=> state.SelectedUser.data)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -51,11 +52,11 @@ export default function MenuAppBar() {
             <Typography className="flex items-center" component="div">
               <Search />
 
-              {localStorage.getItem("selectedUser") ? (
+              {logedInUser ? (
                 <>
-                  <Favorite favoriteItems={user.favorite} />
+                  <Favorite favoriteItems={user} />
 
-                  <Cart cartItems={user.cart} />
+                  <Cart cartItems={user} />
 
                   <UserMenu />
                 </>

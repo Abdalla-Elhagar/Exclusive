@@ -4,7 +4,6 @@ import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateFavorites } from "../slices/selectedUser";
 import { sendTotal } from "../slices/sendData";
 
 
@@ -60,7 +59,6 @@ export default function Cart() {
     };
     myUser.cart = user.cart.filter((product: any) => product._id !== id);
 
-    dispatch(updateFavorites(myUser));
   };
 
   const handleUpdateCart = () => {

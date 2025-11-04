@@ -4,7 +4,6 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { TfiReload } from "react-icons/tfi";
 import { Link } from "react-router-dom";
 import SectionHeader from "../components/sectionHeader";
-import { sUser } from "../slices/selectedUser";
 import { addToCartAction, myFavoriteIDs } from "../slices/saveNewUser";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
@@ -66,7 +65,6 @@ export default function ProductData() {
       };
 
       const updatedUsersArray = [...usersWithOutSelectedUser, updatedUser];
-      dispatch(sUser(updatedUser));
       dispatch(myFavoriteIDs(updatedUsersArray));
       if (isProductInFavorites) {
         toast.info("Product removed from favorites!");
@@ -119,7 +117,6 @@ export default function ProductData() {
       };
 
       const updatedUsersArray: any = [...usersWithOutSelectedUser, updatedUser];
-      dispatch(sUser(updatedUser));
       dispatch(addToCartAction(updatedUsersArray));
       if (isProductInCart) {
         toast.info("Product is already in the cart!");

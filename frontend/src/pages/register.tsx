@@ -2,47 +2,88 @@ import image from "../images/signUpAndLogIn.png";
 import google from "../images/Icon-Google.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { myUsers } from "../slices/saveNewUser";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+const API = import.meta.env.VITE_API;
+import MoonLoader from "./../../node_modules/react-spinners/esm/MoonLoader";
+import { useSelector } from "react-redux";
+
 export default function Register() {
+  const logedInUser = useSelector((state: any) => state.SelectedUser.data);
   const navigate = useNavigate();
+
+  if (logedInUser) {
+    navigate("/");
+    return;
+  }
+
   type user = {
     name: string;
     phone: string;
     password: string;
   };
-  const usersData: any = useSelector((state: any) => state.ArrayOfUsers.data);
 
-  const dispatch = useDispatch();
   const [user, setUser] = useState({
     name: "",
     phone: "",
     password: "",
-    cart: [],
-    favorite: [],
-    favoriteIDs: [],
   });
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [finedUserError, setFinedUserError] = useState(false);
+  const checkUserPhone = async () => {
+    const res = await fetch(API + "/users/check-user-phone", {
+      method: "POST",
+      body: JSON.stringify({ phone: user.phone }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  const filteredPhone =
-    usersData.length > 0
-      ? usersData.filter((e: any) => e.phone === user.phone)
-      : [];
-
-  function saveNewUser() {
-    setError(true);
+    return await res.json();
+  };
+  const handleRegister = async () => {
     if (
-      user.phone.length > 10 &&
-      user.password.length > 5 &&
-      user.name.length > 2 &&
-      (usersData.length > 0 ? filteredPhone.length === 0 : true)
+      user.phone.length < 11 &&
+      user.password.length < 6 &&
+      user.name.length < 3
     ) {
-      dispatch(myUsers(user));
-      navigate("/logIn");
+      setError(true);
+      return;
     }
-  }
+    setError(false);
+
+    try {
+      setLoading(true);
+      const checkUserPhoneData = await checkUserPhone();
+
+      if (!checkUserPhoneData) {
+        setFinedUserError(true);
+        return;
+      }
+      setFinedUserError(false);
+
+      await fetch(API + "/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name: user.name,
+          phone: user.phone,
+          password: user.password,
+        }),
+      });
+
+      navigate("/");
+      location.reload();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="register my-20 items-center flex w-full justify-between">
@@ -62,12 +103,12 @@ export default function Register() {
               type="text"
               id="name"
             />
-            {error && user.name.length < 1 ? (
+            {error && user.name.length < 1 && (
               <p className="text-sm text-red-500">the name is required</p>
-            ) : null}
-            {error && user.name.length < 3 && user.name.length != 0 ? (
+            )}
+            {error && user.name.length < 3 && user.name.length != 0 && (
               <p className="text-sm text-red-500">Enter a correct name</p>
-            ) : null}
+            )}
 
             <input
               value={user.phone}
@@ -77,15 +118,12 @@ export default function Register() {
               type="number"
               id="phone"
             />
-            {error &&
-            usersData.length > 0 &&
-            filteredPhone.length > 0 &&
-            user.phone === filteredPhone[0].phone ? (
+            {finedUserError && user.phone.length > 9 && (
               <p className="text-sm text-red-500">
                 The phone number has been used before (Please use another phone
                 number)
               </p>
-            ) : null}
+            )}
             {error && user.phone.length < 1 ? (
               <p className="text-sm text-red-500">
                 the phone number is required
@@ -95,9 +133,6 @@ export default function Register() {
               <p className="text-sm text-red-500">
                 Enter a correct phone number{" "}
               </p>
-            ) : null}
-            {error && user.phone == filteredPhone[0] ? (
-              <p className="text-sm text-red-500">this phone used before </p>
             ) : null}
 
             <input
@@ -118,10 +153,21 @@ export default function Register() {
             ) : null}
 
             <button
-              onClick={saveNewUser}
+              disabled={loading}
+              onClick={handleRegister}
               className="bg-mainColor w-full py-4 text-white rounded-md mt-10"
             >
-              Create Account
+              {loading ? (
+                <MoonLoader
+                  color="#ffffff"
+                  cssOverride={{}}
+                  loading
+                  size={23}
+                  speedMultiplier={0.7}
+                />
+              ) : (
+                <span>Create Account</span>
+              )}
             </button>
           </form>
           <button className="google w-full border-2 rounded-md flex gap-3 justify-center items-center py-4 mt-5">

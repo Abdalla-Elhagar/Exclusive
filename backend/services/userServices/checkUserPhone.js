@@ -6,9 +6,9 @@ export const checkUserPhone = async (req, res) => {
   const findPhone = await userModel.findOne({ phone });
 
   if (findPhone) {
-    res.status(400).json("choose another phone");
+    res.status(200).json(false);
     return;
   }
 
-  res.status(400).json(true);
+  res.status(200).json(true);
 };

@@ -1,6 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
-import { sUser } from "../slices/selectedUser";
 import { myUsersWithNewPass } from "../slices/saveNewUser";
 
 export default function Profile() {
@@ -24,7 +23,6 @@ export default function Profile() {
       changePassword.newPass.length > 5 &&
       changePassword.confirmPass == changePassword.newPass
     ) {
-      dispach(sUser({ ...user, password: changePassword.newPass }));
       usersWithOutSelectedUser.push({
         ...user,
         password: changePassword.newPass,

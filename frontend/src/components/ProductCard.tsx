@@ -4,8 +4,6 @@ import Typography from "@mui/material/Typography";
 import StarIcon from "@mui/icons-material/Star";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
-import { sUser, updateFavorites } from "../slices/selectedUser";
-import { addToCartAction, myFavoriteIDs } from "../slices/saveNewUser";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -21,11 +19,8 @@ export default function ProductCard({ product }: { product: productType }) {
   function sendDataToProductPage(myProduct: any) {
     // dispatch(product(myProduct));
   }
-  const myUsers = useSelector((state: any) => state.ArrayOfUsers.data);
   const user = useSelector((state: any) => state.SelectedUser.selectedData);
-  const usersWithOutSelectedUser = myUsers.filter(
-    (Fuser: any) => Fuser.phone != user.phone
-  );
+
 
   const [, setFavoritesState] = useState(() => {
     const storedFavorites = localStorage.getItem("selectedUser");
@@ -58,7 +53,6 @@ export default function ProductCard({ product }: { product: productType }) {
       (ele: any) => ele != myProduct.id
     );
 
-    dispatch(updateFavorites(myUser));
   }
 
   function addToFavorite(myProduct: any, id: any) {
@@ -87,9 +81,7 @@ export default function ProductCard({ product }: { product: productType }) {
         favoriteIDs: updatedIDs,
       };
 
-      const updatedUsersArray = [...usersWithOutSelectedUser, updatedUser];
-      dispatch(sUser(updatedUser));
-      dispatch(myFavoriteIDs(updatedUsersArray));
+      const updatedUsersArray = [];
       if (isProductInFavorites) {
         toast.info("Product removed from favorites!");
       } else {
@@ -140,9 +132,7 @@ export default function ProductCard({ product }: { product: productType }) {
         cart: updatedProducts,
       };
 
-      const updatedUsersArray: any = [...usersWithOutSelectedUser, updatedUser];
-      dispatch(sUser(updatedUser));
-      dispatch(addToCartAction(updatedUsersArray));
+
       if (isProductInCart) {
         toast.info("Product is already in the cart!");
       } else {
@@ -171,20 +161,21 @@ export default function ProductCard({ product }: { product: productType }) {
             <RiDeleteBin6Line className="size-5" />
           </button>
         ) : (
-          <button
-            onClick={() => {
-              addToFavorite(product, product._id);
-            }}
-            className={`absolute z-20 ${
-              user.favoriteIDs?.includes(product._id) ? "bg-mainColor" : ""
-            } hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]`}
-          >
-            <FavoriteBorderIcon
-              className={` ${
-                user.favoriteIDs?.includes(product._id) ? "text-white" : ""
-              }`}
-            />
-          </button>
+          <></>
+          // <button
+          //   onClick={() => {
+          //     addToFavorite(product, product._id);
+          //   }}
+          //   className={`absolute z-20 ${
+          //     user.favoriteIDs?.includes(product._id) ? "bg-mainColor" : ""
+          //   } hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]`}
+          // >
+          //   <FavoriteBorderIcon
+          //     className={` ${
+          //       user.favoriteIDs?.includes(product._id) ? "text-white" : ""
+          //     }`}
+          //   />
+          // </button>
         )}
         <Link
           onClick={() => sendDataToProductPage(product)}

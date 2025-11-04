@@ -28,12 +28,12 @@ export default function MobileNav({
             setActivePage(i.path);
           }}
           className={`size-14 RPageButton ${
-            activePage === "/" ? "active" : ""
+            activePage === i.path ? "active" : ""
           }`}
           key={index}
           aria-label={i.title}
         >
-          <Link className="size-full" to="/">
+          <Link className="size-full" to={i.path}>
             {i.icon}
           </Link>
         </IconButton>

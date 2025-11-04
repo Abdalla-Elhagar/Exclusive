@@ -12,7 +12,7 @@ export default function AllProducts() {
       </h3>
       <div className="flex flex-wrap justify-center gap-5 w-full my-10">
         {Products.map((product) => (
-          <ProductCard product={product} />
+          <ProductCard key={product._id} product={product} />
         ))}
       </div>
     </div>

@@ -22,6 +22,8 @@ import { APIProductData } from "./API/getProductData";
 import { useDispatch } from "react-redux";
 import { StoreProducts } from "./slices/productData";
 import CategoriesPage from "./pages/CategoryPage";
+import { logedInUser } from "./slices/selectedUser";
+const API = import.meta.env.VITE_API
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +35,8 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -50,6 +54,21 @@ function App() {
     };
     fetchProductData();
   }, [dispatch]);
+
+
+  useEffect(() => {
+  fetch(API + "/users/me", {
+    method: "GET",
+    credentials: "include",
+  })
+    .then(async (res) => {
+      if (!res.ok) throw new Error("Not authenticated");
+      const data = await res.json();
+      dispatch(logedInUser(data));
+    })
+    .catch(() => dispatch(logedInUser(null))); 
+}, []);
+
 
   return (
     <QueryClientProvider client={queryClient}>
