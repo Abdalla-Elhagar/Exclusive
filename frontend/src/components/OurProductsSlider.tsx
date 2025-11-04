@@ -4,12 +4,15 @@ import "swiper/css";
 import "swiper/css/navigation";
 // @ts-ignore
 import "swiper/css/grid";
-import { UpdatedProducts as Products } from "../data/products";
 import EastOutlinedIcon from "@mui/icons-material/EastOutlined";
 import WestOutlinedIcon from "@mui/icons-material/WestOutlined";
 import ProductCard from "./ProductCard";
+import { useSelector } from "react-redux";
+import type { productType } from "../data/products";
 
 export default function OurProductsSlider() {
+  const Products:productType[] = useSelector((state:any) => state.productData.data)
+
   const breakpointsData = {
     640: {
       slidesPerView: 2,
@@ -48,7 +51,7 @@ export default function OurProductsSlider() {
         modules={[Navigation, Grid]}
       >
         {Products.slice(0, 20).map((product) => (
-          <SwiperSlide key={product.id}>
+          <SwiperSlide key={product._id}>
             <ProductCard product={product} />
           </SwiperSlide>
         ))}

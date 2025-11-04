@@ -19,37 +19,31 @@ const categories: any = [
     id: 1,
     title: "Phones",
     icon: <PhoneIphoneOutlinedIcon className="myIcon text-2xl" />,
-    path: "/phones",
   },
   {
     id: 2,
     title: "TV",
     icon: <TvOutlinedIcon className="myIcon text-2xl" />,
-    path: "/TV",
   },
   {
     id: 3,
     title: "Audio",
     icon: <HeadphonesOutlinedIcon className="myIcon text-2xl" />,
-    path: "/audio",
   },
   {
     id: 4,
     title: "Gaming",
     icon: <SportsEsportsOutlinedIcon className="myIcon text-2xl" />,
-    path: "/Gaming",
   },
   {
     id: 5,
     title: "laptops",
     icon: <LaptopWindowsOutlinedIcon className="myIcon text-2xl" />,
-    path: "/laptop",
   },
   {
     id: 6,
     title: "Appliances",
     icon: <BlenderOutlinedIcon className="myIcon text-2xl" />,
-    path: "/appliances",
   },
 ];
 
@@ -102,10 +96,10 @@ export default function Categories() {
         >
           {categories.map((category: any) => (
             <SwiperSlide
-              key={category.id}
+              key={category._id}
               className="card w-60 rounded-md hover:bg-mainColor flex flex-col  transition-all duration-300 hover:border-white text-center group border-2 border-black/30"
             >
-              <Link to={category.title} className="w-full">
+              <Link to={"/categories"} className="w-full">
                 <div className="icon group-hover:text-white transition-all duration-300 pt-10 text-black/90">
                   {category.icon}
                 </div>

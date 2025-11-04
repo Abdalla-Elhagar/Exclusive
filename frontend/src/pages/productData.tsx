@@ -4,7 +4,6 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { TfiReload } from "react-icons/tfi";
 import { Link } from "react-router-dom";
 import SectionHeader from "../components/sectionHeader";
-import { UpdatedProducts as Products } from "../data/products";
 import { sUser } from "../slices/selectedUser";
 import { addToCartAction, myFavoriteIDs } from "../slices/saveNewUser";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,9 +11,13 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductCard from "../components/ProductCard";
+import type { productType } from "../data/products";
 
 export default function ProductData() {
   const dispatch = useDispatch();
+  const Products: productType[] = useSelector(
+    (state: any) => state.productData.data
+  );
 
   const myUsers = useSelector((state: any) => state.ArrayOfUsers.data);
   const user = useSelector((state: any) => state.SelectedUser.selectedData);
@@ -45,11 +48,11 @@ export default function ProductData() {
 
     setFavoritesState((prev: any) => {
       const isProductInFavorites = prev.favorite.some(
-        (product: any) => product.id === myProduct.id
+        (product: any) => product._id === myProduct.id
       );
 
       const updatedProducts = isProductInFavorites
-        ? prev.favorite.filter((product: any) => product.id !== myProduct.id)
+        ? prev.favorite.filter((product: any) => product._id !== myProduct.id)
         : [...prev.favorite, myProduct];
 
       const updatedIDs = isProductInFavorites
@@ -103,7 +106,7 @@ export default function ProductData() {
     setAddToCartState((prev: any) => {
       prev.cart = Array.isArray(prev.cart) ? prev.cart : [];
       const isProductInCart: any = prev.cart.some(
-        (product: any) => product.id === myProduct.id
+        (product: any) => product._id === myProduct.id
       );
 
       const updatedProducts: any = isProductInCart

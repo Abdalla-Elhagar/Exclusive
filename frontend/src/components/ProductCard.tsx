@@ -7,7 +7,6 @@ import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import { sUser, updateFavorites } from "../slices/selectedUser";
 import { addToCartAction, myFavoriteIDs } from "../slices/saveNewUser";
 import { useDispatch, useSelector } from "react-redux";
-import { product1 } from "../slices/productData";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,7 +19,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 export default function ProductCard({ product }: { product: productType }) {
   const dispatch = useDispatch();
   function sendDataToProductPage(myProduct: any) {
-    dispatch(product1(myProduct));
+    // dispatch(product(myProduct));
   }
   const myUsers = useSelector((state: any) => state.ArrayOfUsers.data);
   const user = useSelector((state: any) => state.SelectedUser.selectedData);
@@ -53,7 +52,7 @@ export default function ProductCard({ product }: { product: productType }) {
     };
 
     myUser.favorite = user.favorite.filter(
-      (ele: any) => ele.id != myProduct.id
+      (ele: any) => ele._id != myProduct.id
     );
     myUser.favoriteIDs = user.favoriteIDs.filter(
       (ele: any) => ele != myProduct.id
@@ -71,11 +70,11 @@ export default function ProductCard({ product }: { product: productType }) {
 
     setFavoritesState((prev: any) => {
       const isProductInFavorites = prev.favorite.some(
-        (product: any) => product.id === myProduct.id
+        (product: any) => product._id === myProduct.id
       );
 
       const updatedProducts = isProductInFavorites
-        ? prev.favorite.filter((product: any) => product.id !== myProduct.id)
+        ? prev.favorite.filter((product: any) => product._id !== myProduct.id)
         : [...prev.favorite, myProduct];
 
       const updatedIDs = isProductInFavorites
@@ -129,7 +128,7 @@ export default function ProductCard({ product }: { product: productType }) {
     setAddToCartState((prev: any) => {
       prev.cart = Array.isArray(prev.cart) ? prev.cart : [];
       const isProductInCart: any = prev.cart.some(
-        (product: any) => product.id === myProduct.id
+        (product: any) => product._id === myProduct.id
       );
 
       const updatedProducts: any = isProductInCart
@@ -174,15 +173,15 @@ export default function ProductCard({ product }: { product: productType }) {
         ) : (
           <button
             onClick={() => {
-              addToFavorite(product, product.id);
+              addToFavorite(product, product._id);
             }}
             className={`absolute z-20 ${
-              user.favoriteIDs?.includes(product.id) ? "bg-mainColor" : ""
+              user.favoriteIDs?.includes(product._id) ? "bg-mainColor" : ""
             } hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]`}
           >
             <FavoriteBorderIcon
               className={` ${
-                user.favoriteIDs?.includes(product.id) ? "text-white" : ""
+                user.favoriteIDs?.includes(product._id) ? "text-white" : ""
               }`}
             />
           </button>

@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
 import SectionHeader from "./sectionHeader";
-import { UpdatedProducts as Products } from "../data/products";
 
 import Image from "../images/homeImages/JBL.png";
 
 import "react-toastify/dist/ReactToastify.css";
 import ProductCard from './ProductCard';
 import Timer from './Timer';
+import type { productType } from "../data/products";
+import { useSelector } from "react-redux";
 
 export default function BestSelling() {
+  const Products:productType[] = useSelector((state:any) => state.productData.data)
+
   const bestProducts = Products.filter(
     (e: any) => e.sales > 1500 && e.rate > 3
   );
@@ -33,7 +36,7 @@ export default function BestSelling() {
 
       <div className="bestProducts4 flex mt-16 justify-center flex-wrap gap-8">
         {first4Products.map((product: any) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product._id} product={product} />
         ))}
       </div>
 

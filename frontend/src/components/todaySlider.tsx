@@ -1,15 +1,17 @@
 import { SwiperSlide, Swiper } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css/navigation";
-import { UpdatedProducts as Products } from "../data/products";
 import "./sliderNavigation.css";
 import "swiper/css";
 import EastOutlinedIcon from "@mui/icons-material/EastOutlined";
 import WestOutlinedIcon from "@mui/icons-material/WestOutlined";
 import "react-toastify/dist/ReactToastify.css";
 import ProductCard from "./ProductCard";
+import { useSelector } from "react-redux";
+import type { productType } from "../data/products";
 
 export default function TodaySlider() {
+  const Products:productType[] = useSelector((state:any) => state.productData.data)
   const breakpointsData = {
     640: {
       slidesPerView: 2,
@@ -48,7 +50,7 @@ export default function TodaySlider() {
         modules={[Navigation, Autoplay]}
       >
         {Products.slice(0, 15).map((product: any) => (
-          <SwiperSlide key={product.id}>
+          <SwiperSlide key={product._id}>
             <ProductCard product={product} />
           </SwiperSlide>
         ))}

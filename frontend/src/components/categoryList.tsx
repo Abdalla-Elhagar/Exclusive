@@ -3,40 +3,40 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
 import { Link } from "react-router-dom";
+import { categories } from "../slices/sendData";
+import { useDispatch } from "react-redux";
 
 export default function CategoreList() {
+  const dispatch = useDispatch();
   const categoryListData = [
     {
-      path: "/phones",
       primary: "Phones",
     },
 
     {
-      path: "/audio",
       primary: "Audio",
     },
 
     {
-      path: "/TV",
       primary: "TV",
     },
 
     {
-      path: "/Gaming",
       primary: "Gaming",
     },
 
     {
-      path: "/appliances",
       primary: "Appliances",
     },
 
     {
-      path: "/laptops",
       primary: "Laptops",
     },
   ];
 
+  const handleSendCategories = (data: string) => {
+    dispatch(categories(data));
+  };
   return (
     <>
       <List
@@ -46,7 +46,11 @@ export default function CategoreList() {
       >
         {categoryListData.map((i, index) => (
           <ListItemButton key={index}>
-            <Link className="w-full" to={i.path}>
+            <Link
+              onClick={() => handleSendCategories(i.primary)}
+              className="w-full"
+              to={"/categories"}
+            >
               <ListItemText primary={i.primary} />
             </Link>
           </ListItemButton>

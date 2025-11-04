@@ -1,8 +1,11 @@
-import { UpdatedProducts as Products } from "../data/products";
 import ProductCard from "../components/ProductCard";
 import { useSelector } from "react-redux";
+import type { productType } from "../data/products";
 
 export default function SearchPage() {
+  const Products: productType[] = useSelector(
+    (state: any) => state.productData.data
+  );
   const searchedName = useSelector((state: any) => state.sendData.searchName);
   const filteredProducts: any = Products.filter(
     (p: any) =>

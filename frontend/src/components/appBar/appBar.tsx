@@ -11,7 +11,7 @@ import { MdLogin } from "react-icons/md";
 import { RiUserAddLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import Search from "./Search";
-import Favorite from "./favorite";
+import Favorite from "./Favorite";
 import Cart from "./Cart";
 import UserMenu from "./UserMenu";
 import Nav from "./Nav";

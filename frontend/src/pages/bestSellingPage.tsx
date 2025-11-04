@@ -1,7 +1,12 @@
-import { UpdatedProducts as Products } from "../data/products";
+import { useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
+import type { productType } from "../data/products";
 
 export default function BestSellingPage() {
+  const Products: productType[] = useSelector(
+    (state: any) => state.productData.data
+  );
+
   const filteredProducts: any = Products.filter(
     (e: any) => e.sales > 1500 && e.rate > 3
   );

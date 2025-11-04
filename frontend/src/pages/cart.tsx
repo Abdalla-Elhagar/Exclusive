@@ -17,7 +17,7 @@ export default function Cart() {
   const [quantities, setQuantities] = useState(() => {
     const initialQuantities: Record<string, number> = {};
     user.cart.forEach((product: any) => {
-      initialQuantities[product.id] = 1;
+      initialQuantities[product._id] = 1;
     });
     return initialQuantities;
   });
@@ -28,7 +28,7 @@ export default function Cart() {
   useEffect(() => {
     const newTotal = user.cart.reduce(
       (sum: number, product: any) =>
-        sum + product.price * (quantities[product.id] || 1),
+        sum + product.price * (quantities[product._id] || 1),
       0
     );
     setTotal(newTotal);
@@ -58,7 +58,7 @@ export default function Cart() {
       favorite: user.favorite,
       favoriteIDs: user.favoriteIDs,
     };
-    myUser.cart = user.cart.filter((product: any) => product.id !== id);
+    myUser.cart = user.cart.filter((product: any) => product._id !== id);
 
     dispatch(updateFavorites(myUser));
   };
@@ -66,7 +66,7 @@ export default function Cart() {
   const handleUpdateCart = () => {
     const updatedCart = user.cart.map((product: any) => ({
       ...product,
-      quantity: quantities[product.id] || 1,
+      quantity: quantities[product._id] || 1,
     }));
 
     dispatch({ type: "UPDATE_CART", payload: updatedCart });
@@ -93,7 +93,7 @@ export default function Cart() {
 
             {user.cart.map((product: any) => (
               <div
-                key={product.id}
+                key={product._id}
                 className="row text-center py-5 border-2 border-black/5 my-5 grid grid-cols-4 max-sm:grid-cols-3 items-center px-5 w-full"
               >
                 <img
@@ -103,16 +103,16 @@ export default function Cart() {
                 />
                 <p className="col-span-1">${product.price}</p>
                 <div className="customNumber col-span-1 flex justify-between items-center gap-3 border-2 w-16 rounded-md border-black/25 px-3 mx-auto ">
-                  <p>{quantities[product.id]}</p>
+                  <p>{quantities[product._id]}</p>
                   <div className="flex flex-col ">
                     <button
-                      onClick={() => updateQuantity(product.id, true)}
+                      onClick={() => updateQuantity(product._id, true)}
                       className="up"
                     >
                       <ExpandLessOutlinedIcon />
                     </button>
                     <button
-                      onClick={() => updateQuantity(product.id, false)}
+                      onClick={() => updateQuantity(product._id, false)}
                       className="down"
                     >
                       <ExpandMoreOutlinedIcon />
@@ -121,7 +121,7 @@ export default function Cart() {
                 </div>
                 <div className="col-span-1 flex justify-end ">
                   <p className="w-20 max-sm:hidden">
-                    ${quantities[product.id] * product.price}
+                    ${quantities[product._id] * product.price}
                   </p>
                 </div>
               </div>
