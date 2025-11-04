@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import "./appBar.css";
 
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdLogin } from "react-icons/md";
 import { RiUserAddLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
@@ -19,10 +19,12 @@ import MobileNav from "./MobileNav";
 
 export default function MenuAppBar() {
   const [activePage, setActivePage] = useState("/");
-  
-  const user = useSelector((state: any) => state.SelectedUser.selectedData);
-  
-  const logedInUser = useSelector((state:any)=> state.SelectedUser.data)
+
+  const cart = useSelector((state: any) => state.productData.cart).items;
+
+const favoriteData = useSelector((state: any) => state.productData.favorite);
+
+  const logedInUser = useSelector((state: any) => state.SelectedUser.data);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -43,40 +45,40 @@ export default function MenuAppBar() {
               <Link to="/">Exclusive</Link>
             </IconButton>
 
-
             <Nav activePage={activePage} setActivePage={setActivePage} />
 
             <MobileNav activePage={activePage} setActivePage={setActivePage} />
-
 
             <Typography className="flex items-center" component="div">
               <Search />
 
               {logedInUser ? (
                 <>
-                  <Favorite favoriteItems={user} />
+                  <Favorite favoriteItems={favoriteData.products} />
 
-                  <Cart cartItems={user} />
+                  <Cart cartItems={cart} />
 
                   <UserMenu />
                 </>
-              ):
-              <>
-              <Link to="/register" className="text-xl ml-5 px-3 rounded-md py-2 bg-mainColor text-white">
-              <RiUserAddLine />
-              </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/register"
+                    className="text-xl ml-5 px-3 rounded-md py-2 bg-mainColor text-white"
+                  >
+                    <RiUserAddLine />
+                  </Link>
 
-              <Link to="/login" className="text-xl ml-2 px-3 rounded-md py-2 bg-mainColor text-white">
-              <MdLogin />
-              </Link>
-              
-              </>
-              
-            }
+                  <Link
+                    to="/login"
+                    className="text-xl ml-2 px-3 rounded-md py-2 bg-mainColor text-white"
+                  >
+                    <MdLogin />
+                  </Link>
+                </>
+              )}
             </Typography>
           </Toolbar>
-
-          
         </div>
       </AppBar>
     </Box>

@@ -5,7 +5,6 @@ import StarIcon from "@mui/icons-material/Star";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,170 +12,129 @@ import type { productType } from "../Types/products";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { userFavorite } from "../slices/productData";
+import { useEffect, useState } from "react";
+const API = import.meta.env.VITE_API
+
 
 export default function ProductCard({ product }: { product: productType }) {
   const dispatch = useDispatch();
-  function sendDataToProductPage(myProduct: any) {
+  function sendDataToProductPage(product: productType) {
     // dispatch(product(myProduct));
   }
-  const user = useSelector((state: any) => state.SelectedUser.selectedData);
+  const cart = useSelector((state: any) => state.productData.cart).items;
 
+const InitialFavorites = useSelector((state: any) => state.productData.favorite);
+const [favorites, setFavorite] = useState<{ products: string[] }>({ products: [] });
 
-  const [, setFavoritesState] = useState(() => {
-    const storedFavorites = localStorage.getItem("selectedUser");
-    return storedFavorites
-      ? JSON.parse(storedFavorites)
-      : {
-          name: "",
-          phone: "",
-          password: "",
-          cart: [],
-          favorite: [],
-          favoriteIDs: [],
-        };
-  });
+useEffect(() => {
+  if (InitialFavorites && InitialFavorites.products) {
+    setFavorite(InitialFavorites);
+  }
+}, [InitialFavorites]);
 
-  function removeFavorite(myProduct: any) {
-    const myUser = {
-      name: user.name,
-      phone: user.phone,
-      password: user.password,
-      cart: user.cart,
-      favorite: [],
-      favoriteIDs: [],
-    };
+  const removeFavorite = async (id: string) => {
 
-    myUser.favorite = user.favorite.filter(
-      (ele: any) => ele._id != myProduct.id
-    );
-    myUser.favoriteIDs = user.favoriteIDs.filter(
-      (ele: any) => ele != myProduct.id
-    );
+    try {
+      const res = await fetch(API + "/favorite/delete-from-favorites" ,{
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({productId: id}),
+        credentials: "include",
+      })
+
+      const data = await res.json()
+      setFavorite(data)
+      dispatch(userFavorite(data))
+    }
+    catch(err) {
+      console.error(err)
+    }
 
   }
 
-  function addToFavorite(myProduct: any, id: any) {
-    const storedUser = localStorage.getItem("selectedUser");
-    if (!storedUser) {
-      toast.error("Please log in to add products to favorites!");
-      return;
+  const addToFavorite = async (id: string) => {
+
+    try {
+      const res = await fetch(API + "/favorite/add-to-favorites" ,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({productId: id}),
+        credentials: "include",
+      })
+
+      const data = await res.json()
+      setFavorite(data)
+      dispatch(userFavorite(data))
+
     }
-
-    setFavoritesState((prev: any) => {
-      const isProductInFavorites = prev.favorite.some(
-        (product: any) => product._id === myProduct.id
-      );
-
-      const updatedProducts = isProductInFavorites
-        ? prev.favorite.filter((product: any) => product._id !== myProduct.id)
-        : [...prev.favorite, myProduct];
-
-      const updatedIDs = isProductInFavorites
-        ? prev.favoriteIDs.filter((clickedId: string) => clickedId !== id)
-        : [...prev.favoriteIDs, id];
-
-      const updatedUser = {
-        ...user,
-        favorite: updatedProducts,
-        favoriteIDs: updatedIDs,
-      };
-
-      const updatedUsersArray = [];
-      if (isProductInFavorites) {
-        toast.info("Product removed from favorites!");
-      } else {
-        toast.success("Product added to favorites!");
-      }
-      return {
-        name: user.name,
-        phone: user.phone,
-        password: user.password,
-        cart: user.cart,
-        favorite: updatedProducts,
-        favoriteIDs: updatedIDs,
-      };
-    });
+    catch(err) {
+      console.error(err)
+    }
   }
-  const [, setAddToCartState] = useState(() => {
-    const storedFavorites = localStorage.getItem("selectedUser");
-    return storedFavorites
-      ? JSON.parse(storedFavorites)
-      : {
-          name: "",
-          phone: "",
-          password: "",
-          cart: [],
-          favorite: [],
-          favoriteIDs: [],
-        };
-  });
+    
 
-  function addToCart(myProduct: any) {
-    const storedUser = localStorage.getItem("selectedUser");
-    if (!storedUser) {
-      toast.error("Please log in to add products to the cart!");
-      return;
-    }
-    setAddToCartState((prev: any) => {
-      prev.cart = Array.isArray(prev.cart) ? prev.cart : [];
-      const isProductInCart: any = prev.cart.some(
-        (product: any) => product._id === myProduct.id
-      );
-
-      const updatedProducts: any = isProductInCart
-        ? prev.cart
-        : [...prev.cart, myProduct];
-
-      const updatedUser: any = {
-        ...user,
-        cart: updatedProducts,
-      };
+  const addToCart = async (id: string) => {
+    
 
 
-      if (isProductInCart) {
+      if (true) {
         toast.info("Product is already in the cart!");
       } else {
         toast.success("Product added to the cart!");
       }
-      return {
-        name: user.name,
-        phone: user.phone,
-        password: user.password,
-        cart: updatedProducts,
-        favorite: user.favorite,
-        favoriteIDs: user.favoriteIDs,
-      };
-    });
-  }
+      
+    };
+  
   return (
     <Card className="group mx-auto relative" sx={{ maxWidth: 300 }}>
       <div
         className={`image w-full h-[260px] top-0 relative bg-[#F5F5F5] overflow-hidden rounded-md`}
       >
-        {location.hash === "#/favorite" ? (
+        {location.hash === "#/favorite" && (
           <button
-            onClick={() => removeFavorite(product)}
+            onClick={() => removeFavorite(product._id)}
             className="absolute z-20 flex justify-center items-center hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]"
           >
             <RiDeleteBin6Line className="size-5" />
           </button>
-        ) : (
-          <></>
-          // <button
-          //   onClick={() => {
-          //     addToFavorite(product, product._id);
-          //   }}
-          //   className={`absolute z-20 ${
-          //     user.favoriteIDs?.includes(product._id) ? "bg-mainColor" : ""
-          //   } hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]`}
-          // >
-          //   <FavoriteBorderIcon
-          //     className={` ${
-          //       user.favoriteIDs?.includes(product._id) ? "text-white" : ""
-          //     }`}
-          //   />
-          // </button>
-        )}
+        )} { location.hash !== "#/favorite" && favorites.products?.includes(product._id) ? (
+          <button
+            onClick={() => {
+              removeFavorite(product._id);
+            }}
+            className={`absolute z-20 ${
+              favorites.products?.includes(product._id) ? "bg-mainColor" : ""
+            } hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]`}
+          >
+            <FavoriteBorderIcon
+              className={` ${
+                favorites.products?.includes(product._id) ? "text-white" : ""
+              }`}
+            />
+          </button>
+        ):
+      (
+          <button
+            onClick={() => {
+              addToFavorite(product._id);
+            }}
+            className={`absolute z-20 ${
+              favorites.products?.includes(product._id) ? "bg-mainColor" : ""
+            } hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]`}
+          >
+            <FavoriteBorderIcon
+              className={` ${
+                favorites.products?.includes(product._id) ? "text-white" : ""
+              }`}
+            />
+          </button>
+        )
+      }
         <Link
           onClick={() => sendDataToProductPage(product)}
           to="/productData"
@@ -191,7 +149,7 @@ export default function ProductCard({ product }: { product: productType }) {
         ) : null}
 
         <button
-          onClick={() => addToCart(product)}
+          onClick={() => addToCart(product._id)}
           className="addToCart z-10 absolute text-white bg-black w-full h-12 transition-all duration-300 -bottom-12 group-hover:bottom-0 left-0"
         >
           Add To Cart

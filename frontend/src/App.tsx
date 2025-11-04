@@ -21,6 +21,9 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import CategoriesPage from "./pages/CategoryPage";
 import { logedInUser } from "./slices/selectedUser";
+import { StoreProductsF } from "./API/getProductData";
+import { userFavoriteF } from "./API/getFavoriteData";
+import { userCartF } from "./API/getCartData";
 
 const API = import.meta.env.VITE_API;
 
@@ -37,6 +40,10 @@ const queryClient = new QueryClient({
 
 function App() {
   const dispatch = useDispatch();
+
+  StoreProductsF()
+  userFavoriteF()
+  userCartF()
 
   useEffect(() => {
     fetch(API + "/users/me", {

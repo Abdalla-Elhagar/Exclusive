@@ -2,11 +2,16 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { userFavorite } from "../slices/productData";
 
-
-
 const API = import.meta.env.VITE_API;
 export const APIFavoriteData = async () => {
-  const res = await fetch(`${API}/favorite`);
+  const res = await fetch(`${API}/favorite`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Request failed: " + res.status);
+  }
   return await res.json();
 };
 

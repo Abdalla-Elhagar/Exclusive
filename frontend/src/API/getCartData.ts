@@ -2,13 +2,18 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { userCart } from "../slices/productData";
 
-
 const API = import.meta.env.VITE_API;
 export const APICartData = async () => {
-  const res = await fetch(`${API}/cart`);
+  const res = await fetch(API+"/cart", {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Request failed: " + res.status);
+  }
   return await res.json();
 };
-
 
 export function userCartF() {
   const dispatch = useDispatch();

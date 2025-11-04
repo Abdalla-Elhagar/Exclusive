@@ -7,11 +7,16 @@ import { quantityControl } from "../services/cartServices/quantityControl.js";
 import { cartModel } from "../models/cart.js";
 const router = Router();
 
-router.get("/", async (req, res) => {
-  const userId = req.user._id;
-  const activeCart = await getActiveCartForUser({ userId });
+router.get("/", verifyJWT, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const activeCart = await getActiveCartForUser({ userId });
 
-  res.status(201).json(activeCart);
+    res.status(201).json(activeCart);
+  } catch (err) {
+    console.error("Error in /cart route:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 router.post("/add-cart-item", verifyJWT, async (req, res) => {
@@ -57,7 +62,7 @@ router.get("/complete-purchase-process", verifyJWT, async (req, res) => {
 
     cart.completed = true;
 
-    await cart.save()
+    await cart.save();
 
     res.status(200).json("complete-purchase-process");
   } catch (err) {
@@ -69,7 +74,7 @@ router.get("/user-carts", verifyJWT, async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const userCarts = await cartModel.find({userId})
+    const userCarts = await cartModel.find({ userId });
 
     res.status(200).json(userCarts);
   } catch (err) {

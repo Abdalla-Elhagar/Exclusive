@@ -33,7 +33,7 @@ router.post("/add-to-favorites", verifyJWT, async (req, res) => {
     }
 
 
-    res.status(200).json(favorite.products)
+    res.status(200).json(favorite)
   } catch (err) {
     console.log(err);
   }
@@ -45,12 +45,15 @@ router.delete("/delete-from-favorites", verifyJWT, async (req, res) => {
     const { productId } = req.body;
 
     const favorite = await favoriteModel.findOne({ userId })
-
+    if(!favorite){
+      res.status(400).json(favorite + ": this product not found")
+      return
+    }
     favorite.products = favorite.products.filter(p => !p.equals(productId))
 
     await favorite.save()
 
-    res.status(200).json("the product has been removed from favorite")
+    res.status(200).json(favorite)
 
   } catch (err) {
     console.log(err);

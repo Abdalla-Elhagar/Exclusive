@@ -20,13 +20,13 @@ const productData = createSlice({
   initialState,
   reducers: {
     StoreProducts: (state, action) => {
-      [...state.data] = action.payload;
+      state.data = action.payload;
     },
     userCart: (state, action) => {
-      [...state.cart] = action.payload;
+      state.cart = action.payload;
     },
     userFavorite: (state, action) => {
-      [...state.favorite] = action.payload;
+      state.favorite = action.payload;
     },
     
   },

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 export default function Favorite({ favoriteItems }: { favoriteItems: any }) {
+  console.log(favoriteItems)
   return (
     <IconButton sx={{ ml: "15px", position: "relative" }} aria-label="favorit">
       <Link to="/favorite">
