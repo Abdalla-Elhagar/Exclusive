@@ -1,18 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { productType } from "../Types/products";
-import type { favoriteTypes } from "../Types/favorite";
-import type { cartTypes } from "../Types/cart";
 
-interface initialStateTypes {
-  data: productType[],
-  favorite: favoriteTypes[],
-  cart: cartTypes[]
-}
 
-const initialState:initialStateTypes = {
-  data:[],
-  cart: [],
-  favorite:[],
+const initialState = {
+  favorite: { products: [] },
+  cart: { items: [], totalAmount: 0 },
+  data: [],
 }
 
 const productData = createSlice({

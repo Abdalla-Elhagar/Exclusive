@@ -52,7 +52,7 @@ export default function OurProductsSlider() {
       >
         {Products.slice(0, 20).map((product) => (
           <SwiperSlide key={product._id}>
-            <ProductCard product={product} />
+            <ProductCard key={product._id} product={product} />
           </SwiperSlide>
         ))}
       </Swiper>

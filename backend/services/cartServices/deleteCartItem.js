@@ -1,20 +1,16 @@
-import { getActiveCartForUser } from "./getActiveCart.js"
+import { productModel } from "../../models/product.js";
+import { getActiveCartForUser } from "./getActiveCart.js";
 
+export const deleteCartItem = async ({ productId, userId }) => {
+  let cart = await getActiveCartForUser({ userId });
+  const product = await productModel.findById(productId);
+  cart.totalAmount -= Number(product.price);
 
+  cart.items = cart.items.filter(
+    (i) => i.product.toString() !== productId.toString()
+  );
 
-export const deleteCartItem = async ({productId, userId})=> {
+  await cart.save();
 
-    let cart = await getActiveCartForUser({userId})
-
-    if(cart.items.length === 0) {
-        return {data: "cart items is empty", statusCode: 400}
-    }
-
-    cart.items = cart.items.filter(i => !i.product.equals(productId))
-
-    await cart.save()
-
-
-return {statusCode: 200, data:cart}
-
-}
+  return { statusCode: 200, data: cart };
+};

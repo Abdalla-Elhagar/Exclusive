@@ -22,7 +22,7 @@ export default function CategoriesPage() {
       </h3>
       <div className="flex flex-wrap justify-center gap-5 w-full my-10">
         {filteredProducts.map((product: any) => (
-          <ProductCard product={product} />
+          <ProductCard key={product._id} product={product} />
         ))}
       </div>
     </div>

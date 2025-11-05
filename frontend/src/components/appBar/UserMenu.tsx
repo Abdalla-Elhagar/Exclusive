@@ -1,8 +1,9 @@
 import { FaRegUser } from "react-icons/fa";
-import { RiShoppingBag3Line } from "react-icons/ri";
+// import { RiShoppingBag3Line } from "react-icons/ri";
 import { TbLogout2 } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+
 const API = import.meta.env.VITE_API;
 
 export default function UserMenu() {
@@ -14,11 +15,11 @@ export default function UserMenu() {
       path: "/MyAccount",
       icon: <FaRegUser className="size-5" />,
     },
-    {
-      text: "My Orders",
-      path: "/orders",
-      icon: <RiShoppingBag3Line className="size-5" />,
-    },
+    // {
+    //   text: "My Orders",
+    //   path: "/orders",
+    //   icon: <RiShoppingBag3Line className="size-5" />,
+    // },
   ];
 
   const handleLogOut = async () => {
@@ -44,7 +45,7 @@ export default function UserMenu() {
         className="size-8 p-1 border-4 border-mainColor rounded-full bg-mainColor text-white"
       />
       {show && (
-        <div className="absolute rounded-md p-3 pl-5 text-base -left-52 top-12 w-[250px] h-[180px] z-50 bg-[#1e1e1e5d] backdrop-blur-[15px] text-white">
+        <div className="absolute rounded-md p-3 pl-5 text-base -left-52 top-12 w-[250px] h-[130px] z-50 bg-[#1e1e1e5d] backdrop-blur-[15px] text-white">
           {userMenuList.map((i, index) => (
             <Link
               key={index}
@@ -52,7 +53,7 @@ export default function UserMenu() {
               to={i.path}
               onClick={() => setShow(false)}
             >
-              <FaRegUser className="size-5" />
+              {i.icon}
               <p>{i.text}</p>
             </Link>
           ))}

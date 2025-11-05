@@ -11,7 +11,7 @@ export default function Cart({ cartItems }: { cartItems: any }) {
         />
       </Link>
       {cartItems != undefined && cartItems.length > 0 && (
-        <div className=" size-4 rounded-full top-3 left-[20px] text-xs text-white absolute bg-mainColor">
+        <div className="pointer-events-none size-4 rounded-full top-3 left-[20px] text-xs text-white absolute bg-mainColor">
           {cartItems.length}
         </div>
       )}

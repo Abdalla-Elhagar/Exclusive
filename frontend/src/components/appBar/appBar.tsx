@@ -20,7 +20,7 @@ import MobileNav from "./MobileNav";
 export default function MenuAppBar() {
   const [activePage, setActivePage] = useState("/");
 
-  const cart = useSelector((state: any) => state.productData.cart).items;
+  const cart = useSelector((state: any) => state.productData.cart);
 
 const favoriteData = useSelector((state: any) => state.productData.favorite);
 
@@ -56,7 +56,7 @@ const favoriteData = useSelector((state: any) => state.productData.favorite);
                 <>
                   <Favorite favoriteItems={favoriteData.products} />
 
-                  <Cart cartItems={cart} />
+                  <Cart cartItems={cart.items} />
 
                   <UserMenu />
                 </>

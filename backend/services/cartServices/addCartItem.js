@@ -19,7 +19,7 @@ export const addCartItem = async ({ productId, quantity, userId }) => {
 
     cart.items.push({ product: productId, unitPrice: product.price, quantity });
 
-    cart.totalAmount += product.price * Number(quantity)
+    cart.totalAmount += Number(product.price) * Number(quantity)
 
     const updatedCart = await cart.save();
 

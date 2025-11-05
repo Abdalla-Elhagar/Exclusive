@@ -51,7 +51,7 @@ export default function TodaySlider() {
       >
         {Products.slice(0, 15).map((product: any) => (
           <SwiperSlide key={product._id}>
-            <ProductCard product={product} />
+            <ProductCard key={product._id} product={product} />
           </SwiperSlide>
         ))}
       </Swiper>

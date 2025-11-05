@@ -12,84 +12,95 @@ import type { productType } from "../Types/products";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { userFavorite } from "../slices/productData";
+import { userCart, userFavorite } from "../slices/productData";
 import { useEffect, useState } from "react";
-const API = import.meta.env.VITE_API
-
+import { sendProductToProductPage } from "../slices/sendData";
+const API = import.meta.env.VITE_API;
 
 export default function ProductCard({ product }: { product: productType }) {
   const dispatch = useDispatch();
-  function sendDataToProductPage(product: productType) {
-    // dispatch(product(myProduct));
+  function sendDataToProductPage(myProduct: productType) {
+    dispatch(sendProductToProductPage(myProduct));
   }
-  const cart = useSelector((state: any) => state.productData.cart).items;
+  const InitialFavorites = useSelector(
+    (state: any) => state.productData.favorite
+  );
+  const [favorites, setFavorite] = useState<{ products: string[] }>({
+    products: [],
+  });
 
-const InitialFavorites = useSelector((state: any) => state.productData.favorite);
-const [favorites, setFavorite] = useState<{ products: string[] }>({ products: [] });
-
-useEffect(() => {
-  if (InitialFavorites && InitialFavorites.products) {
-    setFavorite(InitialFavorites);
-  }
-}, [InitialFavorites]);
+  useEffect(() => {
+    if (InitialFavorites && InitialFavorites.products) {
+      setFavorite(InitialFavorites);
+    }
+  }, [InitialFavorites]);
 
   const removeFavorite = async (id: string) => {
-
     try {
-      const res = await fetch(API + "/favorite/delete-from-favorites" ,{
+      const res = await fetch(API + "/favorite/delete-from-favorites", {
         method: "DELETE",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({productId: id}),
+        body: JSON.stringify({ productId: id }),
         credentials: "include",
-      })
+      });
 
-      const data = await res.json()
-      setFavorite(data)
-      dispatch(userFavorite(data))
-    }
-    catch(err) {
-      console.error(err)
-    }
+      const data = await res.json();
+      setFavorite(data);
+      dispatch(userFavorite(data));
 
-  }
+      toast.success("Product has been removed from favorites");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const addToFavorite = async (id: string) => {
-
     try {
-      const res = await fetch(API + "/favorite/add-to-favorites" ,{
+      const res = await fetch(API + "/favorite/add-to-favorites", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({productId: id}),
+        body: JSON.stringify({ productId: id }),
         credentials: "include",
-      })
+      });
 
-      const data = await res.json()
-      setFavorite(data)
-      dispatch(userFavorite(data))
+      const data = await res.json();
+      setFavorite(data);
+      dispatch(userFavorite(data));
 
+      toast.success("Product has been added to favorites");
+    } catch (err) {
+      console.error(err);
     }
-    catch(err) {
-      console.error(err)
-    }
-  }
-    
+  };
 
   const addToCart = async (id: string) => {
-    
+    try {
+      const res = await fetch(API + "/cart/add-cart-item", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId: id, quantity: 1 }),
+        credentials: "include",
+      });
 
-
-      if (true) {
+      if (!res.ok) {
         toast.info("Product is already in the cart!");
       } else {
-        toast.success("Product added to the cart!");
+        toast.success("Product has been added to the cart!");
       }
-      
-    };
-  
+
+      const data = await res.json();
+      dispatch(userCart(data));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <Card className="group mx-auto relative" sx={{ maxWidth: 300 }}>
       <div
@@ -102,7 +113,9 @@ useEffect(() => {
           >
             <RiDeleteBin6Line className="size-5" />
           </button>
-        )} { location.hash !== "#/favorite" && favorites.products?.includes(product._id) ? (
+        )}{" "}
+        {location.hash !== "#/favorite" &&
+        favorites.products?.includes(product._id) ? (
           <button
             onClick={() => {
               removeFavorite(product._id);
@@ -117,8 +130,7 @@ useEffect(() => {
               }`}
             />
           </button>
-        ):
-      (
+        ) : location.hash !== "#/favorite" &&(
           <button
             onClick={() => {
               addToFavorite(product._id);
@@ -133,8 +145,7 @@ useEffect(() => {
               }`}
             />
           </button>
-        )
-      }
+        )}
         <Link
           onClick={() => sendDataToProductPage(product)}
           to="/productData"
@@ -147,7 +158,6 @@ useEffect(() => {
             -{product.discount}%
           </div>
         ) : null}
-
         <button
           onClick={() => addToCart(product._id)}
           className="addToCart z-10 absolute text-white bg-black w-full h-12 transition-all duration-300 -bottom-12 group-hover:bottom-0 left-0"
