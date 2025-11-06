@@ -60,10 +60,12 @@ app.use("/favorite", favoriteRouter);
 
 seedProducts()
 
-app.listen(PORT || 5000, () => {
-  try {
-    console.log("the server is running");
-  } catch (err) {
-    console.log(err);
-  }
-});
+// app.listen(PORT || 5000, () => {
+//   try {
+//     console.log("the server is running");
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
+
+export default app;
