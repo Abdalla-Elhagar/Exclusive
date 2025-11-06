@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { userCart } from "../slices/productData";
 
-export const API = 'https://exclusive-nine-eta.vercel.app/api/test'
+export const API = 'https://exclusive-backend-phi.vercel.app'
 export const APICartData = async () => {
   const res = await fetch(API+"/cart", {
     method: "GET",
