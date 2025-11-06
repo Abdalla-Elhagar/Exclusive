@@ -1,5 +1,4 @@
 import image from "../images/signUpAndLogIn.png";
-import google from "../images/Icon-Google.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -170,10 +169,6 @@ export default function Register() {
               )}
             </button>
           </form>
-          <button className="google w-full border-2 rounded-md flex gap-3 justify-center items-center py-4 mt-5">
-            <img className="size-5" src={google} alt="google-icon" />
-            <p>Sign up with Google</p>
-          </button>
           <div className="bottom flex justify-center mt-10 text-black/60 gap-5">
             <span>Already have account?</span>
             <Link className="border-b-2 border-black/25" to="/logIn">
