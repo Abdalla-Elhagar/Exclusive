@@ -1,34 +1,31 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { userCart } from "../slices/productData";
+import type { cartTypes } from "../Types/cart";
 
-export const API = 'https://exclusive-backend-phi.vercel.app'
-export const APICartData = async () => {
-  const res = await fetch(API+"/cart", {
+const API = import.meta.env.VITE_API;
+
+const fetchCart = async (): Promise<cartTypes> => {
+  const res = await fetch(`${API}/cart`, {
     method: "GET",
     credentials: "include",
   });
-
-  if (!res.ok) {
-    throw new Error("Request failed: " + res.status);
-  }
-  return await res.json();
+  if (!res.ok) throw new Error("Failed to fetch cart");
+  return res.json();
 };
 
-export function userCartF() {
+export const useCart = () => {
   const dispatch = useDispatch();
 
-  const [_, setProducts] = useState<any>([]);
+  const query = useQuery<cartTypes, Error>({
+    queryKey: ["cart"],
+    queryFn: fetchCart,
+    staleTime: 5 * 60 * 1000,
+  });
 
-  useEffect(() => {
-    const fetchProductData = async () => {
-      const productRef = await APICartData();
+  if (query.data) {
+    dispatch(userCart(query.data));
+  }
 
-      if (productRef) {
-        setProducts(productRef);
-        dispatch(userCart(productRef));
-      }
-    };
-    fetchProductData();
-  }, [dispatch]);
-}
+  return query;
+};

@@ -33,7 +33,11 @@ export default function MobileNav({
           key={index}
           aria-label={i.title}
         >
-          <Link className="size-full" to={i.path}>
+          <Link
+            aria-label="View product details"
+            className="size-full"
+            to={i.path}
+          >
             {i.icon}
           </Link>
         </IconButton>

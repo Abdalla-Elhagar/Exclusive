@@ -4,13 +4,15 @@ import SectionHeader from "./sectionHeader";
 import Image from "../images/homeImages/JBL.png";
 
 import "react-toastify/dist/ReactToastify.css";
-import ProductCard from './ProductCard';
-import Timer from './Timer';
+import ProductCard from "./ProductCard";
+import Timer from "./Timer";
 import type { productType } from "../Types/products";
 import { useSelector } from "react-redux";
 
 export default function BestSelling() {
-  const Products:productType[] = useSelector((state:any) => state.productData.data)
+  const Products: productType[] = useSelector(
+    (state: any) => state.productData.data
+  );
 
   const bestProducts = Products.filter(
     (e: any) => e.sales > 1500 && e.rate > 3
@@ -47,7 +49,10 @@ export default function BestSelling() {
             Enhance Your Music Experience
           </h2>
           <Timer />
-          <button className="bg-[#00FF66] block max-lg:text-sm max-md:mx-auto text-white max-lg:px-4 max-lg-py-2 px-8 py-3 rounded-md">
+          <button
+            aria-label="button"
+            className="bg-[#00FF66] block max-lg:text-sm max-md:mx-auto text-white max-lg:px-4 max-lg-py-2 px-8 py-3 rounded-md"
+          >
             Buy Now!
           </button>
         </div>

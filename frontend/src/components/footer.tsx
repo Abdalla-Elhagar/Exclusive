@@ -25,12 +25,7 @@ export default function Footer() {
     { title: "Shop", path: "/" },
   ];
 
-  const quickLinks = [
-    "Privacy Policy",
-    "Terms Of Use",
-    "FAQ",
-    "Contact",
-  ];
+  const quickLinks = ["Privacy Policy", "Terms Of Use", "FAQ", "Contact"];
 
   const socialIcons = [
     { src: FaceBook, alt: "Facebook" },
@@ -44,7 +39,6 @@ export default function Footer() {
       <div className="container">
         {/* ====== Main Footer Content ====== */}
         <div className="flex flex-wrap justify-between gap-5 max-sm:justify-center max-sm:text-center max-sm:gap-20 mb-20">
-          
           {/* ====== Subscribe Section ====== */}
           <div className="flex flex-col gap-5">
             <h3 className="text-3xl font-semibold">Exclusive</h3>
@@ -77,7 +71,11 @@ export default function Footer() {
           <div className="flex flex-col gap-5">
             <h3 className="text-3xl font-semibold">Account</h3>
             {accountLinks.map((link, index) => (
-              <Link key={index} to={link.path}>
+              <Link
+                aria-label="View product details"
+                key={index}
+                to={link.path}
+              >
                 {link.title}
               </Link>
             ))}
@@ -124,11 +122,7 @@ export default function Footer() {
 
         {/* ====== Footer Bottom ====== */}
         <div className="flex justify-center items-center gap-2 max-lg:mb-20">
-          <img
-            src={Copyright}
-            alt="Copyright"
-            className="size-4 opacity-30"
-          />
+          <img src={Copyright} alt="Copyright" className="size-4 opacity-30" />
           <p className="opacity-30">
             Copyright Rimel 2022. All rights reserved
           </p>

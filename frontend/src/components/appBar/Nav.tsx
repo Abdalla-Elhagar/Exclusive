@@ -27,7 +27,11 @@ export default function Nav({
           component="button"
           onClick={() => setActivePage(page.path)}
         >
-          <Link className="block py-2" to={page.path}>
+          <Link
+            aria-label="View product details"
+            className="block py-2"
+            to={page.path}
+          >
             {page.name}
           </Link>
         </Typography>

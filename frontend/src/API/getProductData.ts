@@ -1,32 +1,28 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { StoreProducts } from "../slices/productData";
+import type { productType } from "../Types/products";
 
-import { API } from "./getCartData";
-;
-export const APIProductData = async () => {
+const API = import.meta.env.VITE_API;
+
+const fetchProducts = async (): Promise<productType[]> => {
   const res = await fetch(`${API}/products`);
-
-  if (!res.ok) {
-    throw new Error("Request failed: " + res.status);
-  }
-  return await res.json();
+  if (!res.ok) throw new Error("Failed to fetch products");
+  return res.json();
 };
 
-export function StoreProductsF() {
+export const useProducts = () => {
   const dispatch = useDispatch();
 
-  const [_, setProducts] = useState<any>([]);
+  const query = useQuery<productType[], Error>({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+    staleTime: 5 * 60 * 1000,
+  });
 
-  useEffect(() => {
-    const fetchProductData = async () => {
-      const productRef = await APIProductData();
+  if (query.data) {
+    dispatch(StoreProducts(query.data));
+  }
 
-      if (productRef) {
-        setProducts(productRef);
-        dispatch(StoreProducts(productRef));
-      }
-    };
-    fetchProductData();
-  }, [dispatch]);
-}
+  return query;
+};

@@ -1,34 +1,31 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { userFavorite } from "../slices/productData";
-import { API } from "./getCartData";
+import type { favoriteTypes } from "../Types/favorite";
 
-export const APIFavoriteData = async () => {
+const API = import.meta.env.VITE_API;
+
+const fetchFavorites = async (): Promise<favoriteTypes> => {
   const res = await fetch(`${API}/favorite`, {
     method: "GET",
     credentials: "include",
   });
-
-  if (!res.ok) {
-    throw new Error("Request failed: " + res.status);
-  }
-  return await res.json();
+  if (!res.ok) throw new Error("Failed to fetch favorites");
+  return res.json();
 };
 
-export function userFavoriteF() {
+export const useFavorites = () => {
   const dispatch = useDispatch();
 
-  const [_, setProducts] = useState<any>([]);
+  const query = useQuery<favoriteTypes, Error>({
+    queryKey: ["favorites"],
+    queryFn: fetchFavorites,
+    staleTime: 5 * 60 * 1000,
+  });
 
-  useEffect(() => {
-    const fetchProductData = async () => {
-      const productRef = await APIFavoriteData();
+  if (query.data) {
+    dispatch(userFavorite(query.data));
+  }
 
-      if (productRef) {
-        setProducts(productRef);
-        dispatch(userFavorite(productRef));
-      }
-    };
-    fetchProductData();
-  }, [dispatch]);
-}
+  return query;
+};

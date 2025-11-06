@@ -1,14 +1,9 @@
 import "./cart.css";
-import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import type { cartItemTypes, cartTypes } from "../Types/cart";
+import { useSelector } from "react-redux";
+import type { cartTypes } from "../Types/cart";
 import type { productType } from "../Types/products";
-import { userCart } from "../slices/productData";
-
-import { API } from "../API/getCartData";
-;
+import CartItem from "../components/CartItem";
 
 export default function Cart() {
   const cart: cartTypes = useSelector((state: any) => state.productData.cart);
@@ -16,103 +11,37 @@ export default function Cart() {
     (state: any) => state.productData.data
   );
 
-  const dispatch = useDispatch();
-
-  const increaseQuantity = async (id: string) => {
-    try {
-      const res = await fetch(API + "/cart/quantity-control", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ productId: id, control: "increase" }),
-      });
-
-      if (!res.ok) {
-        return;
-      }
-
-      const data = await res.json();
-
-      dispatch(userCart(data));
-    } catch (err) {}
-  };
-
-  const decreaseQuantity = async (id: string) => {
-    try {
-      const res = await fetch(API + "/cart/quantity-control", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ productId: id, control: "decrease" }),
-      });
-
-      const data = await res.json();
-
-      dispatch(userCart(data));
-    } catch (err) {}
-  };
-
   return (
     <div className="cart">
       <div className="container">
         <div className="my-20 text-black/20">
           Home / <span className="text-black">Cart</span>
         </div>
+
         <div className="content">
           <div className="myTable">
-            <div className="tableHeader font-semibold py-5 border-2 max-sm:grid-cols-3 border-black/5 my-5 grid grid-cols-4 px-5">
-              <p className="col-span-1">Product</p>
-              <p className="col-span-1 text-center">Price</p>
-              <p className="col-span-1 text-center">Quantity</p>
-              <p className="col-span-1 max-sm:hidden text-end">Subtotal</p>
+            <div className="tableHeader font-semibold py-5 border-2 border-black/5 my-5 grid grid-cols-4 px-5">
+              <p>Product</p>
+              <p className="text-center">Price</p>
+              <p className="text-center">Quantity</p>
+              <p className="text-end max-sm:hidden">Subtotal</p>
             </div>
 
-            {cart?.items?.map((product: cartItemTypes) => {
+            {cart?.items?.map((product) => {
               const productData = Products.find(
                 (p) => p._id.toString() === product.product.toString()
               );
-              if (productData)
-                return (
-                  <div
-                    key={product.product}
-                    className="row text-center py-5 border-2 border-black/5 my-5 grid grid-cols-4 max-sm:grid-cols-3 items-center px-5 w-full"
-                  >
-                    <img
-                      className="w-16 col-span-1"
-                      src={productData.image}
-                      alt="Product"
-                    />
-                    <p className="col-span-1">${productData.price}</p>
-                    <div className="customNumber col-span-1 flex justify-between items-center gap-3 border-2 w-16 rounded-md border-black/25 px-3 mx-auto ">
-                      <p>{product.quantity}</p>
-                      <div className="flex flex-col ">
-                        <button
-                          onClick={() => increaseQuantity(product.product)}
-                          className="up"
-                        >
-                          <ExpandLessOutlinedIcon />
-                        </button>
-                        <button
-                          onClick={() => decreaseQuantity(product.product)}
-                          className="down"
-                        >
-                          <ExpandMoreOutlinedIcon />
-                        </button>
-                      </div>
-                    </div>
-                    <div className="col-span-1 flex justify-end ">
-                      <p className="w-20 max-sm:hidden">
-                        ${product.quantity * productData.price}
-                      </p>
-                    </div>
-                  </div>
-                );
+              if (!productData) return null;
+              return (
+                <CartItem
+                  key={product.product}
+                  product={product}
+                  productData={productData}
+                />
+              );
             })}
           </div>
+
           <div className="bottom w-full max-sm:flex-col gap-5 flex justify-between my-5">
             <Link
               to="/"
@@ -120,7 +49,10 @@ export default function Cart() {
             >
               Return To Shop
             </Link>
-            <button className="border-2 border-black/30 py-4 px-10 rounded-md">
+            <button
+              aria-label="button"
+              className="border-2 border-black/30 py-4 px-10 rounded-md"
+            >
               Update Cart
             </button>
           </div>
@@ -131,7 +63,10 @@ export default function Cart() {
                 placeholder="Coupon Code"
                 type="text"
               />
-              <button className="py-4 h-14 max-lg:w-full w-40 bg-mainColor text-white rounded-md">
+              <button
+                aria-label="button"
+                className="py-4 h-14 max-lg:w-full w-40 bg-mainColor text-white rounded-md"
+              >
                 Apply Coupon
               </button>
             </div>

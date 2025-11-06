@@ -55,7 +55,11 @@ export default function Search() {
           onChange={(e) => setSearch(e.target.value)}
           type="text"
         />
-        <Link to="/searched" onClick={handleSearch}>
+        <Link
+          aria-label="View product details"
+          to="/searched"
+          onClick={handleSearch}
+        >
           <SearchIcon
             sx={{
               fontSize: "20px",

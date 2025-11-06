@@ -5,7 +5,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 export default function Favorite({ favoriteItems }: { favoriteItems: any }) {
   return (
     <IconButton sx={{ ml: "15px", position: "relative" }} aria-label="favorit">
-      <Link to="/favorite">
+      <Link aria-label="View product details" to="/favorite">
         <FavoriteBorderIcon sx={{ color: "black" }} />
       </Link>
       {favoriteItems != undefined && favoriteItems.length > 0 && (

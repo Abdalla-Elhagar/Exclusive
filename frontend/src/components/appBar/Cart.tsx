@@ -5,7 +5,7 @@ import { IconButton } from "@mui/material";
 export default function Cart({ cartItems }: { cartItems: any }) {
   return (
     <IconButton aria-label="cart">
-      <Link to="/cart">
+      <Link aria-label="View product details" to="/cart">
         <ShoppingCartOutlinedIcon
           sx={{ color: "black", position: "relative" }}
         />

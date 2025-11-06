@@ -10,12 +10,12 @@ import type { productType } from "../Types/products";
 import { toast } from "react-toastify";
 import { userCart } from "../slices/productData";
 import { useNavigate } from "react-router-dom";
-import { API } from "../API/getCartData";
-;
-
+import PulseLoader from "react-spinners/esm/PulseLoader";
+const API = import.meta.env.VITE_API;
 export default function CheckOut() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const cart: cartTypes = useSelector((state: any) => state.productData.cart);
   const Products: productType[] = useSelector(
@@ -40,6 +40,7 @@ export default function CheckOut() {
   ];
 
   const completeOrderr = async () => {
+    setLoading(true);
     try {
       const res = await fetch(API + "/cart/complete-purchase-process", {
         method: "POST",
@@ -59,6 +60,8 @@ export default function CheckOut() {
       location.reload();
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -182,15 +185,24 @@ export default function CheckOut() {
                   placeholder="Coupon Code"
                   className="border px-4 py-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                 />
-                <button className="w-80 bg-red-500 text-white px-4 py-3 rounded-md hover:bg-red-600 transition">
+                <button
+                  aria-label="button"
+                  className="w-80 bg-red-500 text-white px-4 py-3 rounded-md hover:bg-red-600 transition"
+                >
                   Apply Coupon
                 </button>
               </div>
               <button
+                disabled={loading}
+                aria-label="button"
                 onClick={completeOrderr}
                 className="bg-red-500 text-white w-40 py-3 rounded-md hover:bg-red-600 transition"
               >
-                Place Order
+                {loading ? (
+                  <PulseLoader color="#ffffff" size={5} />
+                ) : (
+                  <span>Place Order</span>
+                )}
               </button>
             </div>
           </div>

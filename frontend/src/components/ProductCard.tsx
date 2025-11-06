@@ -14,8 +14,8 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import { userCart, userFavorite } from "../slices/productData";
 import { useEffect, useState } from "react";
 import { sendProductToProductPage } from "../slices/sendData";
-import { API } from "../API/getCartData";
-;
+const API = import.meta.env.VITE_API;
+import PulseLoader from "react-spinners/esm/PulseLoader";
 
 export default function ProductCard({ product }: { product: productType }) {
   const dispatch = useDispatch();
@@ -28,6 +28,10 @@ export default function ProductCard({ product }: { product: productType }) {
   const [favorites, setFavorite] = useState<{ products: string[] }>({
     products: [],
   });
+  const logedInUser = useSelector((state: any) => state.SelectedUser.data);
+
+  const [loading, setLoading] = useState(false);
+  const [cartLoading, setCartLoading] = useState(false);
 
   useEffect(() => {
     if (InitialFavorites && InitialFavorites.products) {
@@ -36,6 +40,11 @@ export default function ProductCard({ product }: { product: productType }) {
   }, [InitialFavorites]);
 
   const removeFavorite = async (id: string) => {
+    setLoading(true);
+    if (!logedInUser) {
+      toast.error("you must login first to make this action");
+      return;
+    }
     try {
       const res = await fetch(API + "/favorite/delete-from-favorites", {
         method: "DELETE",
@@ -53,10 +62,17 @@ export default function ProductCard({ product }: { product: productType }) {
       toast.success("Product has been removed from favorites");
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const addToFavorite = async (id: string) => {
+    setLoading(true);
+    if (!logedInUser) {
+      toast.error("you must login first to make this action");
+      return;
+    }
     try {
       const res = await fetch(API + "/favorite/add-to-favorites", {
         method: "POST",
@@ -74,10 +90,17 @@ export default function ProductCard({ product }: { product: productType }) {
       toast.success("Product has been added to favorites");
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const addToCart = async (id: string) => {
+    setCartLoading(true);
+    if (!logedInUser) {
+      toast.error("you must login first to make this action");
+      return;
+    }
     try {
       const res = await fetch(API + "/cart/add-cart-item", {
         method: "POST",
@@ -98,17 +121,19 @@ export default function ProductCard({ product }: { product: productType }) {
       dispatch(userCart(data));
     } catch (err) {
       console.error(err);
+    } finally {
+      setCartLoading(false);
     }
   };
-
   return (
     <Card className="group mx-auto relative" sx={{ maxWidth: 300 }}>
       <div
         className={`image w-full h-[260px] top-0 relative bg-[#F5F5F5] overflow-hidden rounded-md`}
       >
-        
-        { favorites.products?.includes(product._id) ? (
+        {favorites.products?.includes(product._id) ? (
           <button
+            disabled={loading}
+            aria-label="button"
             onClick={() => {
               removeFavorite(product._id);
             }}
@@ -116,14 +141,27 @@ export default function ProductCard({ product }: { product: productType }) {
               favorites.products?.includes(product._id) ? "bg-mainColor" : ""
             } hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]`}
           >
-            <FavoriteBorderIcon
-              className={` ${
-                favorites.products?.includes(product._id) ? "text-white" : ""
-              }`}
-            />
+            {loading ? (
+              <PulseLoader
+                color={
+                  favorites.products?.includes(product._id)
+                    ? "#ffffff"
+                    : "#DB4444"
+                }
+                size={5}
+              />
+            ) : (
+              <FavoriteBorderIcon
+                className={` ${
+                  favorites.products?.includes(product._id) ? "text-white" : ""
+                }`}
+              />
+            )}
           </button>
         ) : (
           <button
+            disabled={loading}
+            aria-label="button"
             onClick={() => {
               addToFavorite(product._id);
             }}
@@ -131,11 +169,22 @@ export default function ProductCard({ product }: { product: productType }) {
               favorites.products?.includes(product._id) ? "bg-mainColor" : ""
             } hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]`}
           >
-            <FavoriteBorderIcon
-              className={` ${
-                favorites.products?.includes(product._id) ? "text-white" : ""
-              }`}
-            />
+            {loading ? (
+              <PulseLoader
+                color={
+                  favorites.products?.includes(product._id)
+                    ? "#ffffff"
+                    : "#DB4444"
+                }
+                size={5}
+              />
+            ) : (
+              <FavoriteBorderIcon
+                className={` ${
+                  favorites.products?.includes(product._id) ? "text-white" : ""
+                }`}
+              />
+            )}
           </button>
         )}
         <Link
@@ -151,10 +200,16 @@ export default function ProductCard({ product }: { product: productType }) {
           </div>
         ) : null}
         <button
+          disabled={cartLoading}
+          aria-label="button"
           onClick={() => addToCart(product._id)}
           className="addToCart z-10 absolute text-white bg-black w-full h-12 transition-all duration-300 -bottom-12 group-hover:bottom-0 left-0"
         >
-          Add To Cart
+          {cartLoading ? (
+            <PulseLoader color="#ffffff" size={5} />
+          ) : (
+            <span>Add To Cart</span>
+          )}
         </button>
         <LazyLoadImage
           className="bg-[#F5F5F5] w-full h-full"

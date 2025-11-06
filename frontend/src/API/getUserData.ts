@@ -1,36 +1,30 @@
-import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { logedInUser } from "../slices/selectedUser";
 
-import { API } from "./getCartData";
-;
+const API = import.meta.env.VITE_API;
 
-export const APIUserData = async () => {
-  const res = await fetch(API + "/users/me", {
+const fetchUser = async (): Promise<any> => {
+  const res = await fetch(`${API}/users/me`, {
     method: "GET",
     credentials: "include",
   });
-
-  if (!res.ok) {
-    throw new Error("Request failed: " + res.status);
-  }
-
-  return await res.json();
+  if (!res.ok) throw new Error("User not authenticated");
+  return res.json();
 };
 
-export const useGetUserData = () => {
+export const useUserData = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userData = await APIUserData();
-        dispatch(logedInUser(userData));
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
-        dispatch(logedInUser(null));
-      }
-    };
-    fetchUserData();
-  }, [dispatch]);
+  const query = useQuery<any, Error>({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  if (query.data) {
+    dispatch(logedInUser(query.data));
+  }
+
+  return query;
 };

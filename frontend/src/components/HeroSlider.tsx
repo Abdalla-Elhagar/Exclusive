@@ -29,7 +29,7 @@ export default function HeroSlider() {
             <div className="content bg-black w-full h-[400px] max-sm:flex-col max-sm:gap-10 items-center max-sm:h-full z-10 max-sm:text-center py-5 flex p-12">
               <div className="left text-white flex flex-col gap-7 justify-between">
                 <div className="iphone flex max-sm:mx-auto items-center gap-9">
-                  <img className="w-[40px]" src={appleLogo} />
+                  <img className="w-[40px]" src={appleLogo} alt="image" />
                   <p>iPhone 14 Series</p>
                 </div>
                 <p className="text-[48px]">Up to 10% off Voucher</p>
@@ -44,7 +44,7 @@ export default function HeroSlider() {
                 </div>
               </div>
               <div className="right">
-                <img className="w-[496px]" src={iphone} />
+                <img className="w-[496px]" src={iphone} alt="image" />
               </div>
             </div>
           </SwiperSlide>

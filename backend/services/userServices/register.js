@@ -27,7 +27,7 @@ export const handleRegister = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
       maxAge: 86400000,
     });
 

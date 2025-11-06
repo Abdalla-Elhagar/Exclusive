@@ -18,10 +18,11 @@ import SearchPage from "./pages/searchedPage";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CategoriesPage from "./pages/CategoryPage";
-import { StoreProductsF } from "./API/getProductData";
-import { userFavoriteF } from "./API/getFavoriteData";
-import { userCartF } from "./API/getCartData";
-import { useGetUserData } from "./API/getUserData";
+import { useProducts } from "./API/getProductData";
+import { useFavorites } from "./API/getFavoriteData";
+import { useCart } from "./API/getCartData";
+import { useUserData } from "./API/getUserData";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,13 +36,26 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  useGetUserData();
-  StoreProductsF();
-  userFavoriteF();
-  userCartF();
-
   return (
     <QueryClientProvider client={queryClient}>
+      <MainApp />
+    </QueryClientProvider>
+  );
+}
+
+function MainApp() {
+  const { isLoading: productsLoading } = useProducts();
+  const { isLoading: favoritesLoading } = useFavorites();
+  const { isLoading: cartLoading } = useCart();
+  const { isLoading: userLoading } = useUserData();
+
+  const isAppLoading =
+    productsLoading || favoritesLoading || cartLoading || userLoading;
+  if (isAppLoading) {
+    return <LoadingSpinner />;
+  }
+  return (
+    <>
       <main className=" overflow-hidden">
         <ToastContainer autoClose={1000} />
         <Header />
@@ -63,7 +77,7 @@ function App() {
         </Routes>
         <Footer />
       </main>
-    </QueryClientProvider>
+    </>
   );
 }
 

@@ -99,7 +99,11 @@ export default function Categories() {
               key={category._id}
               className="card w-60 rounded-md hover:bg-mainColor flex flex-col  transition-all duration-300 hover:border-white text-center group border-2 border-black/30"
             >
-              <Link to={"/categories"} className="w-full">
+              <Link
+                aria-label="View product details"
+                to={"/categories"}
+                className="w-full"
+              >
                 <div className="icon group-hover:text-white transition-all duration-300 pt-10 text-black/90">
                   {category.icon}
                 </div>

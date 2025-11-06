@@ -12,85 +12,110 @@ import ProductCard from "../components/ProductCard";
 import type { productType } from "../Types/products";
 import type { favoriteTypes } from "../Types/favorite";
 import { userCart, userFavorite } from "../slices/productData";
-import { API } from "../API/getCartData";
-;
-
-
+import PulseLoader from "react-spinners/esm/PulseLoader";
+const API = import.meta.env.VITE_API;
 export default function ProductData() {
   const dispatch = useDispatch();
+  const logedInUser = useSelector((state: any) => state.SelectedUser.data);
 
-const favoriteData: favoriteTypes = useSelector(
+  const favoriteData: favoriteTypes = useSelector(
     (state: any) => state.productData.favorite
   );
-  const Products:productType[] = useSelector((state:any) => state.productData.data)
+  const Products: productType[] = useSelector(
+    (state: any) => state.productData.data
+  );
   const myProduct: productType = useSelector(
     (state: any) => state.sendData.productHsBeenSent
-  );  
+  );
   const [quantity, setQuantity] = useState(1);
 
+  const [loading, setLoading] = useState(false);
+  const [cartLoading, setCartLoading] = useState(false);
+
   const removeFavorite = async (id: string) => {
-      try {
-        const res = await fetch(API + "/favorite/delete-from-favorites", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ productId: id }),
-          credentials: "include",
-        });
-  
-        const data = await res.json();
-        dispatch(userFavorite(data));
-  
-        toast.success("Product has been removed from favorites");
-      } catch (err) {
-        console.error(err);
+    setLoading(true);
+    if (!logedInUser) {
+      toast.error("you must login first to make this action");
+      return;
+    }
+    try {
+      const res = await fetch(API + "/favorite/delete-from-favorites", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId: id }),
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      dispatch(userFavorite(data));
+
+      toast.success("Product has been removed from favorites");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addToFavorite = async (id: string) => {
+    setLoading(true);
+    if (!logedInUser) {
+      toast.error("you must login first to make this action");
+      return;
+    }
+    try {
+      const res = await fetch(API + "/favorite/add-to-favorites", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId: id }),
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      dispatch(userFavorite(data));
+
+      toast.success("Product has been added to favorites");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addToCart = async (id: string) => {
+    setCartLoading(true);
+    if (!logedInUser) {
+      toast.error("you must login first to make this action");
+      return;
+    }
+    try {
+      const res = await fetch(API + "/cart/add-cart-item", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId: id, quantity }),
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        toast.info("Product is already in the cart!");
+      } else {
+        toast.success("Product has been added to the cart!");
       }
-    };
-  
-    const addToFavorite = async (id: string) => {
-      try {
-        const res = await fetch(API + "/favorite/add-to-favorites", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ productId: id }),
-          credentials: "include",
-        });
-  
-        const data = await res.json();
-        dispatch(userFavorite(data));
-  
-        toast.success("Product has been added to favorites");
-      } catch (err) {
-        console.error(err);
-      }
-    };
-  
-    const addToCart = async (id: string) => {
-      try {
-        const res = await fetch(API + "/cart/add-cart-item", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ productId: id, quantity }),
-          credentials: "include",
-        });
-  
-        if (!res.ok) {
-          toast.info("Product is already in the cart!");
-        } else {
-          toast.success("Product has been added to the cart!");
-        }
-  
-        const data = await res.json();
-        dispatch(userCart(data));
-      } catch (err) {
-        console.error(err);
-      }
-    };
+
+      const data = await res.json();
+      dispatch(userCart(data));
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setCartLoading(false);
+    }
+  };
 
   const bestProducts = Products.filter(
     (e: any) => e.sales > 1500 && e.rate > 3
@@ -143,6 +168,7 @@ const favoriteData: favoriteTypes = useSelector(
             <div className="count-buy max-sm:flex-wrap max-sm:items-center max-sm:justify-center flex gap-5 justify-between items-center">
               <div className="count h-14 w-52 flex justify-between items-center gap-x-5 border-2 border-black/40  rounded-md">
                 <button
+                  aria-label="button"
                   className="text-2xl size-full border-black/40 hover:bg-mainColor hover:text-white border-r-2"
                   onClick={() => setQuantity(quantity + 1)}
                 >
@@ -151,48 +177,95 @@ const favoriteData: favoriteTypes = useSelector(
                 <p className="w-48 text-center">{quantity}</p>
 
                 <button
+                  aria-label="button"
                   className="text-2xl size-full border-black/40 hover:bg-mainColor hover:text-white border-l-2"
-                  onClick={() => (quantity > 1 ? setQuantity(quantity - 1) : null)}
+                  onClick={() =>
+                    quantity > 1 ? setQuantity(quantity - 1) : null
+                  }
                 >
                   -
                 </button>
               </div>
               <button
+                disabled={cartLoading}
+                aria-label="button"
                 onClick={() => addToCart(myProduct._id)}
                 className="py-4 h-14 max-sm:w-3/4 w-56 self-end bg-mainColor text-white rounded-md"
               >
-                Buy Now
+                {cartLoading ? (
+                  <PulseLoader color="#ffffff" size={5} />
+                ) : (
+                  <span>Buy Now</span>
+                )}
               </button>
 
-              {favoriteData.products?.includes(myProduct._id) ?
-              <button
-                className={`${
-                  favoriteData.products?.includes(myProduct._id)
-                    && "bg-mainColor rounded-lg"}`}
-                onClick={() => {
-                  removeFavorite(myProduct._id);
-                }}
-              >
-                <MdFavoriteBorder
+              {favoriteData.products?.includes(myProduct._id) ? (
+                <button
+                  disabled={loading}
+                  aria-label="button"
                   className={`${
-                    favoriteData.products?.includes(myProduct._id)
-                      && "text-white border-none"} size-14 border-2 border-black/60 p-3 rounded-md`}
-                />
-              </button> : <button
-                className={`${
-                  favoriteData.products?.includes(myProduct._id)
-                    && "bg-mainColor rounded-lg"}`}
-                onClick={() => {
-                  addToFavorite(myProduct._id);
-                }}
-              >
-                <MdFavoriteBorder
+                    favoriteData.products?.includes(myProduct._id) &&
+                    "bg-mainColor rounded-lg"
+                  }${
+                    favoriteData.products?.includes(myProduct._id) &&
+                    "text-white border-none"
+                  } size-14 border-2 border-black/60 rounded-md flex justify-center items-center`}
+                  onClick={() => {
+                    removeFavorite(myProduct._id);
+                  }}
+                >
+                  {loading ? (
+                    <PulseLoader
+                      color={
+                        favoriteData.products?.includes(myProduct._id)
+                          ? "#ffffff"
+                          : "#DB4444"
+                      }
+                      size={5}
+                    />
+                  ) : (
+                    <MdFavoriteBorder
+                      className={` ${
+                        favoriteData.products?.includes(myProduct._id) &&
+                        "text-white border-none"
+                      } size-9 border-2 border-black/60 rounded-md`}
+                    />
+                  )}
+                </button>
+              ) : (
+                <button
+                  disabled={loading}
+                  aria-label="button"
                   className={`${
-                    favoriteData.products?.includes(myProduct._id)
-                      && "text-white border-none"} size-14 border-2 border-black/60 p-3 rounded-md`}
-                />
-              </button>}
-
+                    favoriteData.products?.includes(myProduct._id) &&
+                    "bg-mainColor rounded-lg"
+                  } ${
+                    favoriteData.products?.includes(myProduct._id) &&
+                    "text-white border-none"
+                  } size-14 border-2 border-black/60 rounded-md flex justify-center items-center`}
+                  onClick={() => {
+                    addToFavorite(myProduct._id);
+                  }}
+                >
+                  {loading ? (
+                    <PulseLoader
+                      color={
+                        favoriteData.products?.includes(myProduct._id)
+                          ? "#ffffff"
+                          : "#DB4444"
+                      }
+                      size={5}
+                    />
+                  ) : (
+                    <MdFavoriteBorder
+                      className={` ${
+                        favoriteData.products?.includes(myProduct._id) &&
+                        "text-white border-none"
+                      } size-9 rounded-md`}
+                    />
+                  )}
+                </button>
+              )}
             </div>
             <div className="border border-black/40">
               <div className="top p-6 border-b border-black/40 flex gap-5 items-center pb-6">

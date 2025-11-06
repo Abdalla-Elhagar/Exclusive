@@ -22,7 +22,7 @@ export default function MenuAppBar() {
 
   const cart = useSelector((state: any) => state.productData.cart);
 
-const favoriteData = useSelector((state: any) => state.productData.favorite);
+  const favoriteData = useSelector((state: any) => state.productData.favorite);
 
   const logedInUser = useSelector((state: any) => state.SelectedUser.data);
 
@@ -42,7 +42,9 @@ const favoriteData = useSelector((state: any) => state.productData.favorite);
               aria-label="Exclusive"
               sx={{ mx: 2, fontWeight: 700, p: 0 }}
             >
-              <Link to="/">Exclusive</Link>
+              <Link aria-label="View product details" to="/">
+                Exclusive
+              </Link>
             </IconButton>
 
             <Nav activePage={activePage} setActivePage={setActivePage} />

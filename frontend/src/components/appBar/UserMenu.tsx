@@ -4,8 +4,7 @@ import { TbLogout2 } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-import { API } from "../../API/getCartData";
-
+const API = import.meta.env.VITE_API;
 
 export default function UserMenu() {
   const [show, setShow] = useState(false);
@@ -60,6 +59,7 @@ export default function UserMenu() {
           ))}
 
           <button
+            aria-label="button"
             onClick={handleLogOut}
             className="w-full hover:ml-2 cursor-pointer transition-all duration-300 flex mb-8 gap-4 justify-start items-center"
           >

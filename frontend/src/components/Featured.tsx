@@ -24,7 +24,9 @@ export default function Featured() {
               <p className="w-[230px] text-sm my-3">
                 Black and White version of the PS5 coming out on sale.
               </p>
-              <button className="border-b border-white/60">Shop Now</button>
+              <button aria-label="button" className="border-b border-white/60">
+                Shop Now
+              </button>
             </div>
             <img src={ps5} alt="ps5" />
           </div>
@@ -36,7 +38,9 @@ export default function Featured() {
               <p className="w-[230px] max-2xl:w-[190px] text-sm my-3">
                 Featured woman collections that give you another vibe.
               </p>
-              <button className="border-b border-white/60">Shop Now</button>
+              <button aria-label="button" className="border-b border-white/60">
+                Shop Now
+              </button>
             </div>
             <img src={woman} alt="woman" />
           </div>
@@ -44,7 +48,9 @@ export default function Featured() {
             <div className="text absolute left-2 bottom-2 text-white/85 pb-5 pl-5 w-[600px]">
               <h3 className="text-2xl font-semibold w-[230px]">Speakers</h3>
               <p className="w-[230px] text-sm my-3">Amazon wireless speakers</p>
-              <button className="border-b border-white/60">Shop Now</button>
+              <button aria-label="button" className="border-b border-white/60">
+                Shop Now
+              </button>
             </div>
             <img src={speaker} alt="speaker" />
           </div>
@@ -52,7 +58,9 @@ export default function Featured() {
             <div className="text absolute left-2 bottom-2 text-white/85 pb-5 pl-5 w-[600px]">
               <h3 className="text-2xl font-semibold w-[230px]">Perfume</h3>
               <p className="w-[230px] text-sm my-3">GUCCI INTENSE OUD EDP</p>
-              <button className="border-b border-white/60">Shop Now</button>
+              <button aria-label="button" className="border-b border-white/60">
+                Shop Now
+              </button>
             </div>
             <img src={perfume} alt="perfume" />
           </div>

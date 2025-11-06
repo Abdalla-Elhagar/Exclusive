@@ -40,7 +40,10 @@ export default function Cantact() {
               className="bg-black/5 py-4 px-4 mt-5 h-[250px] w-full placeholder:text-lg"
               placeholder="Your Massage"
             ></textarea>
-            <button className="py-4 h-14 max-sm:w-full w-48 self-end bg-mainColor text-white rounded-md mt-5">
+            <button
+              aria-label="button"
+              className="py-4 h-14 max-sm:w-full w-48 self-end bg-mainColor text-white rounded-md mt-5"
+            >
               Send Massage
             </button>
           </div>

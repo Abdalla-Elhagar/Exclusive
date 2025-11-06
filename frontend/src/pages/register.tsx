@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { API } from "../API/getCartData";
-;
-import MoonLoader from "./../../node_modules/react-spinners/esm/MoonLoader";
+const API = import.meta.env.VITE_API;
+import HashLoader from "./../../node_modules/react-spinners/esm/HashLoader";
 import { useSelector } from "react-redux";
 
 export default function Register() {
@@ -153,17 +152,18 @@ export default function Register() {
             ) : null}
 
             <button
+              aria-label="button"
               disabled={loading}
               onClick={handleRegister}
-              className="bg-mainColor w-full py-4 text-white rounded-md mt-10"
+              className="bg-mainColor disabled:bg-mainColor/70 w-full py-4 text-white rounded-md mt-10 flex justify-center items-center h-14"
             >
               {loading ? (
-                <MoonLoader
+                <HashLoader
                   color="#ffffff"
                   cssOverride={{}}
                   loading
-                  size={23}
-                  speedMultiplier={0.7}
+                  size={25}
+                  speedMultiplier={1}
                 />
               ) : (
                 <span>Create Account</span>
@@ -172,7 +172,11 @@ export default function Register() {
           </form>
           <div className="bottom flex justify-center mt-10 text-black/60 gap-5">
             <span>Already have account?</span>
-            <Link className="border-b-2 border-black/25" to="/logIn">
+            <Link
+              aria-label="View product details"
+              className="border-b-2 border-black/25"
+              to="/logIn"
+            >
               Log in
             </Link>
           </div>

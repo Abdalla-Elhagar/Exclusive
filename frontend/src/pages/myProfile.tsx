@@ -2,10 +2,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { logedInUser } from "../slices/selectedUser";
+import PulseLoader from "react-spinners/PulseLoader";
 
-import { API } from "../API/getCartData";
-;
-
+const API = import.meta.env.VITE_API;
 export default function Profile() {
   const dispatch = useDispatch();
   const [password, setPassword] = useState({
@@ -19,14 +18,18 @@ export default function Profile() {
   const [passwordError, setPasswordError] = useState(false);
   const [userData, setUserData] = useState({
     name: user?.name || "",
-    phone: user?.phone || "",
+    phone: user?.phone,
   });
 
-  const handleEditNameAndPhone = async () => {
+  const [loading, setLoading] = useState(false);
+
+  const handleEditName = async () => {
+    setLoading(true);
+
     if (
       userData.name.length < 3 ||
       userData.phone.length < 11 ||
-      password.newPass.length < 5 ||
+      (userData.phone != user.phone && password.newPass.length < 5) ||
       password.confirmPass !== password.newPass
     ) {
       setError(true);
@@ -56,10 +59,14 @@ export default function Profile() {
       dispatch(logedInUser(data));
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleChangePass = async () => {
+    setLoading(true);
+
     if (
       password.newPass.length < 5 ||
       password.confirmPass !== password.newPass ||
@@ -91,11 +98,13 @@ export default function Profile() {
       toast.success("the Data has been updated");
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleUplode = () => {
-    handleEditNameAndPhone();
+    handleEditName();
     handleChangePass();
   };
 
@@ -122,7 +131,6 @@ export default function Profile() {
                 <li>My Payment Options</li>
               </ul>
             </div>
-            
           </div>
           <div className="shadow border max-sm:p-5 p-10 grid col-span-2 grid-cols-2">
             <h2 className="text-xl ml-5 mb-5 col-span-2 font-semibold text-mainColor ">
@@ -151,6 +159,7 @@ export default function Profile() {
               <label className="text-lg">Phone</label>
               <input
                 className="bg-[#F5F5F5] text-lg text-black/50 py-2 p-5"
+                disabled={true}
                 value={userData.phone}
                 type="number"
                 onChange={(e) =>
@@ -223,6 +232,7 @@ export default function Profile() {
             </div>
             <div className="buttons w-full justify-end col-span-2 ml-5 flex gap-5 mt-5">
               <button
+                aria-label="button"
                 onClick={() =>
                   setPassword({
                     currentPass: "",
@@ -234,10 +244,16 @@ export default function Profile() {
                 Cancel
               </button>
               <button
+                disabled={loading}
+                aria-label="button"
                 onClick={handleUplode}
                 className="text-white bg-mainColor py-4 w-40"
               >
-                Save Changes
+                {loading ? (
+                  <PulseLoader color="#ffffff" size={5} />
+                ) : (
+                  <span>Save Changes</span>
+                )}
               </button>
             </div>
           </div>
