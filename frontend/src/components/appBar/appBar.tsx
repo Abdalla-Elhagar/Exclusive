@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import "./appBar.css";
 
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MdLogin } from "react-icons/md";
 import { RiUserAddLine } from "react-icons/ri";
 import { useSelector } from "react-redux";

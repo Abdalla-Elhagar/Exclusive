@@ -29,6 +29,10 @@ app.use(
     credentials: true,
   })
 );
+app.get("/api/test", (req, res) => {
+  res.send("API working fine!");
+});
+
 app.use(cookieParser());
 app.use(express.json());
 

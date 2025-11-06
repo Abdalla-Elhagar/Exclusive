@@ -102,9 +102,9 @@ export default function About() {
         </div>
 
         <div className="my-20 flex justify-between max-md:justify-center max-lg:flex-wrap gap-5">
-          {sales.map((ele) => (
+          {sales.map((ele,index) => (
             <div
-              key={ele._id}
+              key={index}
               className="card w-[300px] border-2 hover:bg-mainColor group hover:text-white transition-all duration-300 py-10 flex flex-col justify-center items-center"
             >
               <div className="bg-black group-hover:bg-white group-hover:text-black transition-all duration-300  group-hover:border-mainColor/40 border-8 border-stone-300/95 text-white size-16 flex justify-center items-center rounded-full">
@@ -131,8 +131,8 @@ export default function About() {
           modules={[Pagination, Autoplay]}
           className="mySwiper my-20"
         >
-          {people.map((ele) => (
-            <SwiperSlide key={ele._id} className="flex justify-center">
+          {people.map((ele,index) => (
+            <SwiperSlide key={index} className="flex justify-center">
               <div className="card max-sm:w-full mx-auto">
                 <div className="image max-sm:w-full w-[370px] h-[430px] relative bg-[#F5F5F5]">
                   <img
