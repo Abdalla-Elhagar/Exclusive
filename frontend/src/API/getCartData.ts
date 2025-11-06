@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { userCart } from "../slices/productData";
 
-export const API = 'http://localhost:5000'
+export const API = 'https://exclusive-nine-eta.vercel.app/api/test'
 export const APICartData = async () => {
   const res = await fetch(API+"/cart", {
     method: "GET",
