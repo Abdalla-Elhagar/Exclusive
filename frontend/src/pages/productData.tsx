@@ -12,7 +12,7 @@ import ProductCard from "../components/ProductCard";
 import type { productType } from "../Types/products";
 import type { favoriteTypes } from "../Types/favorite";
 import { userCart, userFavorite } from "../slices/productData";
-import { API } from "./getCartData";
+import { API } from "../API/getCartData";
 ;
 
 

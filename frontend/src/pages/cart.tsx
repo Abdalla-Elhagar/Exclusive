@@ -7,7 +7,7 @@ import type { cartItemTypes, cartTypes } from "../Types/cart";
 import type { productType } from "../Types/products";
 import { userCart } from "../slices/productData";
 
-import { API } from "./getCartData";
+import { API } from "../API/getCartData";
 ;
 
 export default function Cart() {

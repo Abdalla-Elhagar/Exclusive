@@ -2,7 +2,7 @@ import image from "../images/signUpAndLogIn.png";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { API } from "./getCartData";
+import { API } from "../API/getCartData";
 ;
 
 export default function LogIn() {

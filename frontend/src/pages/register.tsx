@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { API } from "./getCartData";
+import { API } from "../API/getCartData";
 ;
 import MoonLoader from "./../../node_modules/react-spinners/esm/MoonLoader";
 import { useSelector } from "react-redux";

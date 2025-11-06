@@ -3,7 +3,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { logedInUser } from "../slices/selectedUser";
 
-import { API } from "./getCartData";
+import { API } from "../API/getCartData";
 ;
 
 export default function Profile() {

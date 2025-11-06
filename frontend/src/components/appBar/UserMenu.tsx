@@ -4,8 +4,8 @@ import { TbLogout2 } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-import { API } from "./getCartData";
-;
+import { API } from "../../API/getCartData";
+
 
 export default function UserMenu() {
   const [show, setShow] = useState(false);

@@ -10,7 +10,7 @@ import type { productType } from "../Types/products";
 import { toast } from "react-toastify";
 import { userCart } from "../slices/productData";
 import { useNavigate } from "react-router-dom";
-import { API } from "./getCartData";
+import { API } from "../API/getCartData";
 ;
 
 export default function CheckOut() {
