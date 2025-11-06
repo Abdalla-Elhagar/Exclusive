@@ -1,16 +1,26 @@
 import { useState, useRef } from "react";
 import { IoCheckmark } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import image1 from "../images/check/1.png";
 import image2 from "../images/check/2.png";
 import image3 from "../images/check/3.png";
 import image4 from "../images/check/4.png";
+import type { cartItemTypes, cartTypes } from "../Types/cart";
+import type { productType } from "../Types/products";
+import { toast } from "react-toastify";
+import { userCart } from "../slices/productData";
+import { useNavigate } from "react-router-dom";
+const API = import.meta.env.VITE_API;
 
 export default function CheckOut() {
-  const user: any = useSelector(
-    (state: any) => state.SelectedUser.selectedData
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const cart: cartTypes = useSelector((state: any) => state.productData.cart);
+  const Products: productType[] = useSelector(
+    (state: any) => state.productData.data
   );
-  const total = useSelector((state: any) => state.sendData.total);
+
   const [selectedOption, setSelectedOption] = useState("cash");
   const refClick: any = useRef<HTMLButtonElement>(null);
   function handleClick() {
@@ -27,6 +37,29 @@ export default function CheckOut() {
     "Phone Number",
     "Email Address",
   ];
+
+  const completeOrderr = async () => {
+    try {
+      const res = await fetch(API + "/cart/complete-purchase-process", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      if (!res.ok) {
+        toast.error("can't check out now (please try later)");
+
+        return;
+      }
+      toast.success("the order has been completed");
+      dispatch(userCart({ items: [], totalAmount: 0 }));
+      navigate("/");
+      location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <section className="checkOut">
       <div className="container">
@@ -71,23 +104,35 @@ export default function CheckOut() {
             </div>
           </div>
           <div className="right max-md:w-full w-3/6">
-            {user.cart.map((product: any) => (
-              <div className="flex justify-between gap-5 items-center">
-                <div className="img-name items-center flex gap-5">
-                  <img
-                    className="size-20"
-                    src={product.image}
-                    alt="ProductImage"
-                  />
-                  <p className="line-clamp-1 h-5 w-40">{product.title}</p>
-                </div>
-                <p>${product.price}</p>
-              </div>
-            ))}
+            {cart.items.map((product: cartItemTypes) => {
+              const productData = Products.find(
+                (p: productType) =>
+                  p._id.toString() === product.product.toString()
+              );
+              if (productData)
+                return (
+                  <div
+                    key={productData._id}
+                    className="flex justify-between gap-5 items-center"
+                  >
+                    <div className="img-name items-center flex gap-5">
+                      <img
+                        className="size-20"
+                        src={productData.image}
+                        alt="ProductImage"
+                      />
+                      <p className="line-clamp-1 h-5 w-40">
+                        {productData.title}
+                      </p>
+                    </div>
+                    <p>${productData.price}</p>
+                  </div>
+                );
+            })}
             <h2 className="text-lg font-semibold my-4">Cart Summary</h2>
             <div className="flex justify-between border-b py-2">
               <span>Subtotal:</span>
-              <span>${total}</span>
+              <span>${cart.totalAmount}</span>
             </div>
             <div className="flex justify-between border-b py-2">
               <span>Shipping:</span>
@@ -95,7 +140,7 @@ export default function CheckOut() {
             </div>
             <div className="flex justify-between font-bold py-2">
               <span>Total:</span>
-              <span>${total}</span>
+              <span>${cart.totalAmount}</span>
             </div>
             <div className="flex mt-10 items-center justify-between pb-4 mb-4">
               <label className="flex items-center cursor-pointer">
@@ -140,7 +185,10 @@ export default function CheckOut() {
                   Apply Coupon
                 </button>
               </div>
-              <button className="bg-red-500 text-white w-40 py-3 rounded-md hover:bg-red-600 transition">
+              <button
+                onClick={completeOrderr}
+                className="bg-red-500 text-white w-40 py-3 rounded-md hover:bg-red-600 transition"
+              >
                 Place Order
               </button>
             </div>

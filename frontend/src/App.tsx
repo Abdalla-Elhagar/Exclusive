@@ -17,15 +17,11 @@ import CheckOut from "./pages/checkOut";
 import SearchPage from "./pages/searchedPage";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import CategoriesPage from "./pages/CategoryPage";
-import { logedInUser } from "./slices/selectedUser";
 import { StoreProductsF } from "./API/getProductData";
 import { userFavoriteF } from "./API/getFavoriteData";
 import { userCartF } from "./API/getCartData";
-
-const API = import.meta.env.VITE_API;
+import { useGetUserData } from "./API/getUserData";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,24 +35,10 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const dispatch = useDispatch();
-
-  StoreProductsF()
-  userFavoriteF()
-  userCartF()
-
-  useEffect(() => {
-    fetch(API + "/users/me", {
-      method: "GET",
-      credentials: "include",
-    })
-      .then(async (res) => {
-        if (!res.ok) throw new Error("Not authenticated");
-        const data = await res.json();
-        dispatch(logedInUser(data));
-      })
-      .catch(() => dispatch(logedInUser(null)));
-  }, []);
+  useGetUserData();
+  StoreProductsF();
+  userFavoriteF();
+  userCartF();
 
   return (
     <QueryClientProvider client={queryClient}>

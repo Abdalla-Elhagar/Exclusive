@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 import type { productType } from "../Types/products";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { userCart, userFavorite } from "../slices/productData";
 import { useEffect, useState } from "react";
 import { sendProductToProductPage } from "../slices/sendData";
@@ -106,16 +105,8 @@ export default function ProductCard({ product }: { product: productType }) {
       <div
         className={`image w-full h-[260px] top-0 relative bg-[#F5F5F5] overflow-hidden rounded-md`}
       >
-        {location.hash === "#/favorite" && (
-          <button
-            onClick={() => removeFavorite(product._id)}
-            className="absolute z-20 flex justify-center items-center hover:text-mainColor text-center rounded-full w-9 h-9 transition-all duration-300 p-[3px] right-5 top-5 bg-[#eee]"
-          >
-            <RiDeleteBin6Line className="size-5" />
-          </button>
-        )}{" "}
-        {location.hash !== "#/favorite" &&
-        favorites.products?.includes(product._id) ? (
+        
+        { favorites.products?.includes(product._id) ? (
           <button
             onClick={() => {
               removeFavorite(product._id);
@@ -130,7 +121,7 @@ export default function ProductCard({ product }: { product: productType }) {
               }`}
             />
           </button>
-        ) : location.hash !== "#/favorite" &&(
+        ) : (
           <button
             onClick={() => {
               addToFavorite(product._id);

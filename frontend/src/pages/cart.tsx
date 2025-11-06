@@ -7,63 +7,53 @@ import type { cartItemTypes, cartTypes } from "../Types/cart";
 import type { productType } from "../Types/products";
 import { userCart } from "../slices/productData";
 
-const API = import.meta.env.VITE_API
-
+const API = import.meta.env.VITE_API;
 
 export default function Cart() {
+  const cart: cartTypes = useSelector((state: any) => state.productData.cart);
+  const Products: productType[] = useSelector(
+    (state: any) => state.productData.data
+  );
 
-  const cart:cartTypes = useSelector((state: any) => state.productData.cart);
-    const Products:productType[] = useSelector((state:any) => state.productData.data)
-  
-  
   const dispatch = useDispatch();
 
-
-  const increaseQuantity = async (id:string) => {
-    try{
+  const increaseQuantity = async (id: string) => {
+    try {
       const res = await fetch(API + "/cart/quantity-control", {
-        method:"PUT",
-        headers:{
-          "Content-Type": "application/json"
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({productId:id,control:"increase"})
-      })
+        body: JSON.stringify({ productId: id, control: "increase" }),
+      });
 
-      if(!res.ok) {
-        return
+      if (!res.ok) {
+        return;
       }
 
-      const data = await res.json()
-      
-      dispatch(userCart(data))
-    }
-    catch(err) {
+      const data = await res.json();
 
-    }
-  }
+      dispatch(userCart(data));
+    } catch (err) {}
+  };
 
-  const decreaseQuantity = async (id:string) => {
-    try{
+  const decreaseQuantity = async (id: string) => {
+    try {
       const res = await fetch(API + "/cart/quantity-control", {
-        method:"PUT",
-        headers:{
-          "Content-Type": "application/json"
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({productId:id,control:"decrease"})
-      })
+        body: JSON.stringify({ productId: id, control: "decrease" }),
+      });
 
-      const data = await res.json()
-      
-      dispatch(userCart(data))
-    }
-    catch(err) {
+      const data = await res.json();
 
-    }
-  }
-
-  
+      dispatch(userCart(data));
+    } catch (err) {}
+  };
 
   return (
     <div className="cart">
@@ -81,43 +71,46 @@ export default function Cart() {
             </div>
 
             {cart?.items?.map((product: cartItemTypes) => {
-              const productData = Products.find((p)=> p._id.toString() === product.product.toString())
+              const productData = Products.find(
+                (p) => p._id.toString() === product.product.toString()
+              );
               if (productData)
-              return (
-              <div
-                key={product.product}
-                className="row text-center py-5 border-2 border-black/5 my-5 grid grid-cols-4 max-sm:grid-cols-3 items-center px-5 w-full"
-              >
-                <img
-                  className="w-16 col-span-1"
-                  src={productData.image}
-                  alt="Product"
-                />
-                <p className="col-span-1">${productData.price}</p>
-                <div className="customNumber col-span-1 flex justify-between items-center gap-3 border-2 w-16 rounded-md border-black/25 px-3 mx-auto ">
-                  <p>{product.quantity}</p>
-                  <div className="flex flex-col ">
-                    <button
-                      onClick={() => increaseQuantity(product.product)}
-                      className="up"
-                    >
-                      <ExpandLessOutlinedIcon />
-                    </button>
-                    <button
-                      onClick={() => decreaseQuantity(product.product)}
-                      className="down"
-                    >
-                      <ExpandMoreOutlinedIcon />
-                    </button>
+                return (
+                  <div
+                    key={product.product}
+                    className="row text-center py-5 border-2 border-black/5 my-5 grid grid-cols-4 max-sm:grid-cols-3 items-center px-5 w-full"
+                  >
+                    <img
+                      className="w-16 col-span-1"
+                      src={productData.image}
+                      alt="Product"
+                    />
+                    <p className="col-span-1">${productData.price}</p>
+                    <div className="customNumber col-span-1 flex justify-between items-center gap-3 border-2 w-16 rounded-md border-black/25 px-3 mx-auto ">
+                      <p>{product.quantity}</p>
+                      <div className="flex flex-col ">
+                        <button
+                          onClick={() => increaseQuantity(product.product)}
+                          className="up"
+                        >
+                          <ExpandLessOutlinedIcon />
+                        </button>
+                        <button
+                          onClick={() => decreaseQuantity(product.product)}
+                          className="down"
+                        >
+                          <ExpandMoreOutlinedIcon />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="col-span-1 flex justify-end ">
+                      <p className="w-20 max-sm:hidden">
+                        ${product.quantity * productData.price}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="col-span-1 flex justify-end ">
-                  <p className="w-20 max-sm:hidden">
-                    ${product.quantity * productData.price}
-                  </p>
-                </div>
-              </div>
-            )})}
+                );
+            })}
           </div>
           <div className="bottom w-full max-sm:flex-col gap-5 flex justify-between my-5">
             <Link
@@ -126,10 +119,7 @@ export default function Cart() {
             >
               Return To Shop
             </Link>
-            <button
-              // onClick={handleUpdateCart}
-              className="border-2 border-black/30 py-4 px-10 rounded-md"
-            >
+            <button className="border-2 border-black/30 py-4 px-10 rounded-md">
               Update Cart
             </button>
           </div>
@@ -162,7 +152,7 @@ export default function Cart() {
                 <div className="w-full flex justify-center">
                   <Link
                     to="/checkOut"
-                    className=" mt-5 py-4 px-10 bg-mainColor text-white rounded-md"
+                    className={`${cart.items.length === 0 && "pointer-events-none bg-mainColor/75 "} hover:scale-105 duration-300 mt-5 py-4 px-10 bg-mainColor text-white rounded-md`}
                   >
                     Proceed to checkout
                   </Link>

@@ -54,7 +54,7 @@ router.put("/quantity-control", verifyJWT, async (req, res) => {
   res.status(respose.statusCode).json(respose.data);
 });
 
-router.get("/complete-purchase-process", verifyJWT, async (req, res) => {
+router.post("/complete-purchase-process", verifyJWT, async (req, res) => {
   try {
     const userId = req.user._id;
 
