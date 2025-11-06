@@ -13,9 +13,12 @@ env.config();
 
 const app = express();
 const PORT = process.env.PORT;
+const DB_USERNAME = process.env.DB_USERNAME;
+const DB_PASSWORD = process.env.DB_PASSWORD;
 
 mongoose
-  .connect("mongodb://localhost:27017/eCommerce")
+  .connect(`mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@cluster0.zvczkti.mongodb.net/Exclusive?retryWrites=true&w=majority&appName=Cluster0
+`)
   .then(() => {
     console.log("connected with DB");
   })
@@ -44,7 +47,7 @@ app.use("/favorite", favoriteRouter);
 
 seedProducts()
 
-app.listen(PORT, () => {
+app.listen(PORT || 5000, () => {
   try {
     console.log("the server is running");
   } catch (err) {
