@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API = import.meta.env.VITE_API;
+import { API } from "./getCartData";
+;
 import MoonLoader from "./../../node_modules/react-spinners/esm/MoonLoader";
 import { useSelector } from "react-redux";
 

@@ -7,7 +7,8 @@ import type { cartItemTypes, cartTypes } from "../Types/cart";
 import type { productType } from "../Types/products";
 import { userCart } from "../slices/productData";
 
-const API = import.meta.env.VITE_API;
+import { API } from "./getCartData";
+;
 
 export default function Cart() {
   const cart: cartTypes = useSelector((state: any) => state.productData.cart);

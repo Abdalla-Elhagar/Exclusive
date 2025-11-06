@@ -14,7 +14,8 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import { userCart, userFavorite } from "../slices/productData";
 import { useEffect, useState } from "react";
 import { sendProductToProductPage } from "../slices/sendData";
-const API = import.meta.env.VITE_API;
+import { API } from "./getCartData";
+;
 
 export default function ProductCard({ product }: { product: productType }) {
   const dispatch = useDispatch();

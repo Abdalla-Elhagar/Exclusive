@@ -12,7 +12,8 @@ import ProductCard from "../components/ProductCard";
 import type { productType } from "../Types/products";
 import type { favoriteTypes } from "../Types/favorite";
 import { userCart, userFavorite } from "../slices/productData";
-const API = import.meta.env.VITE_API;
+import { API } from "./getCartData";
+;
 
 
 export default function ProductData() {

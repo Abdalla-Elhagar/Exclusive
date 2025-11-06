@@ -4,7 +4,8 @@ import { TbLogout2 } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-const API = import.meta.env.VITE_API;
+import { API } from "./getCartData";
+;
 
 export default function UserMenu() {
   const [show, setShow] = useState(false);

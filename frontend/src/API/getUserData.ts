@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { logedInUser } from "../slices/selectedUser";
 
-const API = import.meta.env.VITE_API;
+import { API } from "./getCartData";
+;
 
 export const APIUserData = async () => {
   const res = await fetch(API + "/users/me", {

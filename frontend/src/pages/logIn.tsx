@@ -2,7 +2,8 @@ import image from "../images/signUpAndLogIn.png";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const API = import.meta.env.VITE_API;
+import { API } from "./getCartData";
+;
 
 export default function LogIn() {
   const navigate = useNavigate();

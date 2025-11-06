@@ -10,7 +10,8 @@ import type { productType } from "../Types/products";
 import { toast } from "react-toastify";
 import { userCart } from "../slices/productData";
 import { useNavigate } from "react-router-dom";
-const API = import.meta.env.VITE_API;
+import { API } from "./getCartData";
+;
 
 export default function CheckOut() {
   const dispatch = useDispatch();
