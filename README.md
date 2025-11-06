@@ -60,8 +60,9 @@ Both frontend and backend use `.env` files for configuration.
 ### **Backend .env Example**
 ```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
+DB_USERNAME=your_mongodb_username
+DB_PASSWORD=your_mongodb_password
 ```
 
 ### **Frontend .env Example
@@ -72,12 +73,13 @@ ________________
 
 ## Project Structure
 
+```
 Exclusive/
 │
 ├── backend/              # Express + MongoDB API
 ├── frontend/             # React + Vite frontend
 └── README.md             # Project documentation
-
+```
 
 ## 👨‍💻 Developer
 
