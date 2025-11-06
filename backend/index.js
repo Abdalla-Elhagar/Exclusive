@@ -28,7 +28,7 @@ mongoose
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://exclusive-frontend-tau.vercel.app/"
+  "https://exclusive-frontend-tau.vercel.app"
 ];
 
 app.use(
