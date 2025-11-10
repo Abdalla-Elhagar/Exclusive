@@ -1,5 +1,5 @@
 import BestSelling from "../components/bestSellingSection";
-import Categories from "../components/categories";
+import CategoriesSlider from "../components/categories";
 import Featured from "../components/Featured";
 import Hero from "../components/Hero";
 import OurProducts from "../components/ourProducts";
@@ -10,7 +10,7 @@ export default function Home() {
     <div className="homeContainer">
       <Hero />
       <Today />
-      <Categories />
+      <CategoriesSlider />
       <BestSelling />
       <OurProducts />
       <Featured />

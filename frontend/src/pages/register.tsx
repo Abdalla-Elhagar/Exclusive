@@ -2,10 +2,10 @@ import image from "../images/signUpAndLogIn.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import HashLoader from "react-spinners/esm/HashLoader";
+import { useSelector } from "react-redux";
 
 const API = import.meta.env.VITE_API;
-import HashLoader from "./../../node_modules/react-spinners/esm/HashLoader";
-import { useSelector } from "react-redux";
 
 export default function Register() {
   const logedInUser = useSelector((state: any) => state.SelectedUser.data);
@@ -30,17 +30,18 @@ export default function Register() {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [finedUserError, setFinedUserError] = useState(false);
+
   const checkUserPhone = async () => {
-    const res = await fetch(API + "/users/check-user-phone", {
+    const res = await fetch(`${API}/users/check-user-phone`, {
       method: "POST",
       body: JSON.stringify({ phone: user.phone }),
       headers: {
         "Content-Type": "application/json",
       },
     });
-
     return await res.json();
   };
+
   const handleRegister = async () => {
     if (
       user.phone.length < 11 &&
@@ -62,7 +63,7 @@ export default function Register() {
       }
       setFinedUserError(false);
 
-      await fetch(API + "/users/register", {
+      const res = await fetch(`${API}/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,6 +75,12 @@ export default function Register() {
           password: user.password,
         }),
       });
+
+      const data = await res.json();
+
+      if (data.token) {
+        sessionStorage.setItem("authToken", data.token);
+      }
 
       navigate("/");
       location.reload();
@@ -185,7 +192,3 @@ export default function Register() {
     </div>
   );
 }
-
-// ...
-
-// ...

@@ -1,4 +1,4 @@
-import {userModel} from "../../models/user.js";
+import { userModel } from "../../models/user.js";
 import bcrypt from "bcrypt";
 import { generateJWT } from "../../utils/generateJWT.js";
 
@@ -24,11 +24,12 @@ export const handleLogin = async (req, res) => {
   const token = generateJWT(findUser);
 
   res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 86400000,
-    });
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+    maxAge: 86400000,
+  });
 
   return res.status(201).json({
     message: "the user loged in.",

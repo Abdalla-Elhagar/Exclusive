@@ -3,8 +3,10 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { logedInUser } from "../slices/selectedUser";
 import PulseLoader from "react-spinners/PulseLoader";
+import { useNavigate } from "react-router-dom";
 
 const API = import.meta.env.VITE_API;
+
 export default function Profile() {
   const dispatch = useDispatch();
   const [password, setPassword] = useState({
@@ -12,6 +14,8 @@ export default function Profile() {
     newPass: "",
     confirmPass: "",
   });
+
+  const navigate = useNavigate();
 
   const user = useSelector((state: any) => state.SelectedUser.data);
   const [error, setError] = useState(false);
@@ -23,6 +27,17 @@ export default function Profile() {
 
   const [loading, setLoading] = useState(false);
 
+  const getHeaders = () => {
+    const token = sessionStorage.getItem("authToken");
+    const headers: any = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    return headers;
+  };
+
   const handleEditName = async () => {
     setLoading(true);
 
@@ -33,32 +48,38 @@ export default function Profile() {
       password.confirmPass !== password.newPass
     ) {
       setError(true);
+      setLoading(false);
       return;
     }
 
     try {
       setError(false);
-      const res = await fetch(API + "/users/update-data", {
+      const res = await fetch(`${API}/users/update-data`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getHeaders(),
         credentials: "include",
         body: JSON.stringify({
           name: userData.name,
           phone: userData.phone,
         }),
       });
+
       if (!res.ok) {
+        if (res.status === 401) {
+          sessionStorage.removeItem("authToken");
+        }
         toast.error("name or phone has been error");
         return;
       }
 
       const data = await res.json();
-
       dispatch(logedInUser(data));
+      toast.success("Profile updated successfully");
+      navigate("/");
+      location.reload();
     } catch (err) {
       console.log(err);
+      toast.error("Error updating profile");
     } finally {
       setLoading(false);
     }
@@ -74,38 +95,49 @@ export default function Profile() {
       userData.phone.length < 11
     ) {
       setError(true);
+      setLoading(false);
       return;
     }
+
     try {
       setError(false);
-      const res = await fetch(API + "/users/change-password", {
+      const res = await fetch(`${API}/users/change-password`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getHeaders(),
         credentials: "include",
         body: JSON.stringify({
           currentPassword: password.currentPass,
           newPassword: password.newPass,
         }),
       });
+
       if (!res.ok) {
+        if (res.status === 401) {
+          sessionStorage.removeItem("authToken");
+        }
         setPasswordError(true);
         toast.error("The current password has been error");
         return;
       }
+
       setPasswordError(false);
-      toast.success("the Data has been updated");
+      toast.success("Password updated successfully");
+      setPassword({
+        currentPass: "",
+        newPass: "",
+        confirmPass: "",
+      });
     } catch (err) {
       console.log(err);
+      toast.error("Error changing password");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleUplode = () => {
-    handleEditName();
-    handleChangePass();
+  const handleUpload = async () => {
+    await handleEditName();
+    await handleChangePass();
   };
 
   return (
@@ -176,12 +208,12 @@ export default function Profile() {
               )}
             </div>
             <div className="input flex max-sm:mx-0 flex-col w-full gap-4 mt-5 ml-5 col-span-2">
-              <h3 className="col-span-2 text-black ">Edit Your Profile</h3>
+              <h3 className="col-span-2 text-black ">Change Your Password</h3>
 
               <input
                 className="bg-[#F5F5F5] w-full text-lg text-black/50 py-2 p-5"
-                placeholder="Current Passwod"
-                type="text"
+                placeholder="Current Password"
+                type="password"
                 value={password.currentPass}
                 onChange={(e) =>
                   setPassword({
@@ -192,13 +224,13 @@ export default function Profile() {
               />
               {passwordError && (
                 <p className="text-sm text-red-500">
-                  the curent password has been error
+                  the current password has been error
                 </p>
               )}
               <input
                 className="bg-[#F5F5F5] w-full text-lg text-black/50 py-2 p-5"
-                placeholder="New Passwod"
-                type="text"
+                placeholder="New Password"
+                type="password"
                 value={password.newPass}
                 onChange={(e) =>
                   setPassword({
@@ -214,8 +246,8 @@ export default function Profile() {
               )}
               <input
                 className="bg-[#F5F5F5] w-full text-lg text-black/50 py-2 p-5"
-                placeholder="Confirm New Passwod"
-                type="text"
+                placeholder="Confirm New Password"
+                type="password"
                 value={password.confirmPass}
                 onChange={(e) =>
                   setPassword({
@@ -246,8 +278,8 @@ export default function Profile() {
               <button
                 disabled={loading}
                 aria-label="button"
-                onClick={handleUplode}
-                className="text-white bg-mainColor py-4 w-40"
+                onClick={handleUpload}
+                className="text-white bg-mainColor py-4 w-40 disabled:bg-mainColor/70"
               >
                 {loading ? (
                   <PulseLoader color="#ffffff" size={5} />

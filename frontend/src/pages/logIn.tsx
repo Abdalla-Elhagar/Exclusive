@@ -3,7 +3,9 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HashLoader from "react-spinners/esm/HashLoader";
+
 const API = import.meta.env.VITE_API;
+
 export default function LogIn() {
   const navigate = useNavigate();
   const logedInUser = useSelector((state: any) => state.SelectedUser.data);
@@ -12,13 +14,17 @@ export default function LogIn() {
     navigate("/");
     return;
   }
+
   const [user, setUser] = useState({ phone: "", password: "" });
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const handleLogIn = async () => {
     try {
       setLoading(true);
-      const res = await fetch(API + "/users/login", {
+      setError(false);
+
+      const res = await fetch(`${API}/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,26 +36,35 @@ export default function LogIn() {
         credentials: "include",
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
         setError(true);
         return;
       }
+
+      if (data.token) {
+        sessionStorage.setItem("authToken", data.token);
+      }
+
       setError(false);
       navigate("/");
       location.reload();
     } catch (err) {
       console.log(err);
+      setError(true);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <div className="register my-20 items-center flex w-full justify-between">
       <img className="w-4/6 max-lg:hidden" src={image} alt="registerImage" />
       <div className="content mx-auto max-w-[500px] max-px-36">
         <div className="container">
           <div className="headerOfSignUp">
-            <h2 className="text-4xl font-semibold mb-5">Create an account</h2>
+            <h2 className="text-4xl font-semibold mb-5">Log In</h2>
             <p>Enter your details below</p>
           </div>
           <form onSubmit={(e) => e.preventDefault()} className="mt-14">

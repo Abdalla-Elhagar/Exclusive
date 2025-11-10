@@ -13,7 +13,9 @@ import type { productType } from "../Types/products";
 import type { favoriteTypes } from "../Types/favorite";
 import { userCart, userFavorite } from "../slices/productData";
 import PulseLoader from "react-spinners/esm/PulseLoader";
+
 const API = import.meta.env.VITE_API;
+
 export default function ProductData() {
   const dispatch = useDispatch();
   const logedInUser = useSelector((state: any) => state.SelectedUser.data);
@@ -32,21 +34,38 @@ export default function ProductData() {
   const [loading, setLoading] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
 
+  const getHeaders = () => {
+    const token = sessionStorage.getItem("authToken");
+    const headers: any = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    return headers;
+  };
+
   const removeFavorite = async (id: string) => {
     setLoading(true);
     if (!logedInUser) {
       toast.error("you must login first to make this action");
+      setLoading(false);
       return;
     }
     try {
-      const res = await fetch(API + "/favorite/delete-from-favorites", {
+      const res = await fetch(`${API}/favorite/delete-from-favorites`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getHeaders(),
         body: JSON.stringify({ productId: id }),
         credentials: "include",
       });
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          sessionStorage.removeItem("authToken");
+        }
+        throw new Error("Failed to remove from favorites");
+      }
 
       const data = await res.json();
       dispatch(userFavorite(data));
@@ -54,6 +73,7 @@ export default function ProductData() {
       toast.success("Product has been removed from favorites");
     } catch (err) {
       console.error(err);
+      toast.error("Error removing from favorites");
     } finally {
       setLoading(false);
     }
@@ -63,17 +83,23 @@ export default function ProductData() {
     setLoading(true);
     if (!logedInUser) {
       toast.error("you must login first to make this action");
+      setLoading(false);
       return;
     }
     try {
-      const res = await fetch(API + "/favorite/add-to-favorites", {
+      const res = await fetch(`${API}/favorite/add-to-favorites`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getHeaders(),
         body: JSON.stringify({ productId: id }),
         credentials: "include",
       });
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          sessionStorage.removeItem("authToken");
+        }
+        throw new Error("Failed to add to favorites");
+      }
 
       const data = await res.json();
       dispatch(userFavorite(data));
@@ -81,6 +107,7 @@ export default function ProductData() {
       toast.success("Product has been added to favorites");
     } catch (err) {
       console.error(err);
+      toast.error("Error adding to favorites");
     } finally {
       setLoading(false);
     }
@@ -90,19 +117,21 @@ export default function ProductData() {
     setCartLoading(true);
     if (!logedInUser) {
       toast.error("you must login first to make this action");
+      setCartLoading(false);
       return;
     }
     try {
-      const res = await fetch(API + "/cart/add-cart-item", {
+      const res = await fetch(`${API}/cart/add-cart-item`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getHeaders(),
         body: JSON.stringify({ productId: id, quantity }),
         credentials: "include",
       });
 
       if (!res.ok) {
+        if (res.status === 401) {
+          sessionStorage.removeItem("authToken");
+        }
         toast.info("Product is already in the cart!");
       } else {
         toast.success("Product has been added to the cart!");
@@ -112,6 +141,7 @@ export default function ProductData() {
       dispatch(userCart(data));
     } catch (err) {
       console.error(err);
+      toast.error("Error adding to cart");
     } finally {
       setCartLoading(false);
     }
@@ -190,7 +220,7 @@ export default function ProductData() {
                 disabled={cartLoading}
                 aria-label="button"
                 onClick={() => addToCart(myProduct._id)}
-                className="py-4 h-14 max-sm:w-3/4 w-56 self-end bg-mainColor text-white rounded-md"
+                className="py-4 h-14 max-sm:w-3/4 w-56 self-end bg-mainColor text-white rounded-md disabled:bg-mainColor/70"
               >
                 {cartLoading ? (
                   <PulseLoader color="#ffffff" size={5} />

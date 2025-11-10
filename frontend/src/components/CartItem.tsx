@@ -19,12 +19,23 @@ export default function CartItem({
   const [quantityLoading, setQuantityLoading] = useState(false);
   const dispatch = useDispatch();
 
+  const getHeaders = () => {
+    const token = sessionStorage.getItem("authToken");
+    const headers: any = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    return headers;
+  };
+
   const updateQuantity = async (control: "increase" | "decrease") => {
     setQuantityLoading(true);
     try {
       const res = await fetch(`${API}/cart/quantity-control`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: getHeaders(),
         credentials: "include",
         body: JSON.stringify({
           productId: product.product,
@@ -32,7 +43,12 @@ export default function CartItem({
         }),
       });
 
-      if (!res.ok) return;
+      if (!res.ok) {
+        if (res.status === 401) {
+          sessionStorage.removeItem("authToken");
+        }
+        return;
+      }
 
       const data = await res.json();
       dispatch(userCart(data));

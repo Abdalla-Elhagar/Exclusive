@@ -1,5 +1,4 @@
 import { FaRegUser } from "react-icons/fa";
-// import { RiShoppingBag3Line } from "react-icons/ri";
 import { TbLogout2 } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -15,19 +14,17 @@ export default function UserMenu() {
       path: "/MyAccount",
       icon: <FaRegUser className="size-5" />,
     },
-    // {
-    //   text: "My Orders",
-    //   path: "/orders",
-    //   icon: <RiShoppingBag3Line className="size-5" />,
-    // },
   ];
 
   const handleLogOut = async () => {
     try {
-      await fetch(API + "/users/log-out", {
+      sessionStorage.removeItem("authToken");
+
+      await fetch(`${API}/users/log-out`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("authToken")}`,
         },
         credentials: "include",
       });
@@ -35,6 +32,7 @@ export default function UserMenu() {
       location.reload();
     } catch (err) {
       console.log(err);
+      location.reload();
     }
   };
 

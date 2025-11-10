@@ -13,41 +13,38 @@ import "swiper/css/navigation";
 import "swiper/css";
 import { Autoplay, Navigation } from "swiper/modules";
 import BlenderOutlinedIcon from "@mui/icons-material/BlenderOutlined";
+import { useDispatch } from "react-redux";
+import { categories } from "../slices/sendData";
 
-const categories: any = [
+const categoriesItems: any = [
   {
-    id: 1,
     title: "Phones",
     icon: <PhoneIphoneOutlinedIcon className="myIcon text-2xl" />,
   },
   {
-    id: 2,
     title: "TV",
     icon: <TvOutlinedIcon className="myIcon text-2xl" />,
   },
   {
-    id: 3,
     title: "Audio",
     icon: <HeadphonesOutlinedIcon className="myIcon text-2xl" />,
   },
   {
-    id: 4,
     title: "Gaming",
     icon: <SportsEsportsOutlinedIcon className="myIcon text-2xl" />,
   },
   {
-    id: 5,
-    title: "laptops",
+    title: "Laptops",
     icon: <LaptopWindowsOutlinedIcon className="myIcon text-2xl" />,
   },
   {
-    id: 6,
     title: "Appliances",
     icon: <BlenderOutlinedIcon className="myIcon text-2xl" />,
   },
 ];
 
-export default function Categories() {
+export default function CategoriesSlider() {
+  const dispatch = useDispatch();
   const breakpointsData = {
     640: {
       slidesPerView: 2,
@@ -94,14 +91,15 @@ export default function Categories() {
           breakpoints={breakpointsData}
           modules={[Autoplay, Navigation]}
         >
-          {categories.map((category: any) => (
+          {categoriesItems.map((category: any, index: number) => (
             <SwiperSlide
-              key={category._id}
+              key={index}
               className="card w-60 rounded-md hover:bg-mainColor flex flex-col  transition-all duration-300 hover:border-white text-center group border-2 border-black/30"
             >
               <Link
                 aria-label="View product details"
                 to={"/categories"}
+                onClick={() => dispatch(categories(category.title))}
                 className="w-full"
               >
                 <div className="icon group-hover:text-white transition-all duration-300 pt-10 text-black/90">

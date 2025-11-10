@@ -11,7 +11,9 @@ import { toast } from "react-toastify";
 import { userCart } from "../slices/productData";
 import { useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/esm/PulseLoader";
+
 const API = import.meta.env.VITE_API;
+
 export default function CheckOut() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,9 +26,11 @@ export default function CheckOut() {
 
   const [selectedOption, setSelectedOption] = useState("cash");
   const refClick: any = useRef<HTMLButtonElement>(null);
+
   function handleClick() {
     refClick.current?.click();
   }
+
   const [isChecked, setIsChecked] = useState(false);
 
   const inputsData = [
@@ -39,31 +43,46 @@ export default function CheckOut() {
     "Email Address",
   ];
 
-  const completeOrderr = async () => {
+  const getHeaders = () => {
+    const token = sessionStorage.getItem("authToken");
+    const headers: any = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    return headers;
+  };
+
+  const completeOrder = async () => {
     setLoading(true);
     try {
-      const res = await fetch(API + "/cart/complete-purchase-process", {
+      const res = await fetch(`${API}/cart/complete-purchase-process`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getHeaders(),
         credentials: "include",
       });
-      if (!res.ok) {
-        toast.error("can't check out now (please try later)");
 
+      if (!res.ok) {
+        if (res.status === 401) {
+          sessionStorage.removeItem("authToken");
+        }
+        toast.error("can't check out now (please try later)");
         return;
       }
+
       toast.success("the order has been completed");
       dispatch(userCart({ items: [], totalAmount: 0 }));
       navigate("/");
       location.reload();
     } catch (err) {
       console.log(err);
+      toast.error("Error completing order");
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <section className="checkOut">
       <div className="container">
@@ -195,8 +214,8 @@ export default function CheckOut() {
               <button
                 disabled={loading}
                 aria-label="button"
-                onClick={completeOrderr}
-                className="bg-red-500 text-white w-40 py-3 rounded-md hover:bg-red-600 transition"
+                onClick={completeOrder}
+                className="bg-red-500 text-white w-40 py-3 rounded-md hover:bg-red-600 transition disabled:bg-red-500/70"
               >
                 {loading ? (
                   <PulseLoader color="#ffffff" size={5} />
